@@ -2,6 +2,7 @@ package io.github.riicarus.common.ast.func;
 
 import io.github.riicarus.common.ast.expr.ExprAST;
 import io.github.riicarus.common.data.AbstractAST;
+import io.github.riicarus.common.data.AstType;
 
 /**
  * 函数定义表达式
@@ -12,11 +13,17 @@ import io.github.riicarus.common.data.AbstractAST;
  */
 public class FunctionAST<T> extends AbstractAST<T> {
 
-    protected PrototypeAST<T> proto;
-    protected ExprAST<T> body;
+    protected final PrototypeAST<T> proto;
+    protected final ExprAST<T> body;
+
+    public FunctionAST(AstType type, PrototypeAST<T> proto, ExprAST<T> body) {
+        super(type);
+        this.proto = proto;
+        this.body = body;
+    }
 
     @Override
-    public T compute() {
-        return body.compute();
+    public String toTreeString(int level) {
+        return null;
     }
 }

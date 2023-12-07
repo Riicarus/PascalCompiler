@@ -1,5 +1,8 @@
 package io.github.riicarus.common.ast.expr;
 
+import io.github.riicarus.common.data.AstType;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,11 +14,17 @@ import java.util.List;
  */
 public class CallExprAST<T> extends ExprAST<T> {
 
-    protected String callFuncName;
-    protected List<ExprAST<?>> args;
+    protected final String callFuncName;
+    protected final List<ExprAST<?>> args = new ArrayList<>();
+
+    public CallExprAST(AstType type, String callFuncName, List<ExprAST<?>> args) {
+        super(type);
+        this.callFuncName = callFuncName;
+        this.args.addAll(args);
+    }
 
     @Override
-    public T compute() {
+    public String toTreeString(int level) {
         return null;
     }
 }
