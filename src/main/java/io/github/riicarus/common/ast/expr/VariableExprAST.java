@@ -28,8 +28,8 @@ public class VariableExprAST<T> extends ExprAST<T> {
     }
 
     @Override
-    public String toString() {
-        return toTreeString(0);
+    public T execute() {
+        return valAST.execute();
     }
 
     @Override
@@ -46,5 +46,10 @@ public class VariableExprAST<T> extends ExprAST<T> {
                 .append(valAST.toTreeString(level + 1));
 
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toTreeString(0);
     }
 }

@@ -26,8 +26,8 @@ public class ValueExprAST<T> extends ExprAST<T> {
     }
 
     @Override
-    public String toString() {
-        return toTreeString(0);
+    public T execute() {
+        return value;
     }
 
     @Override
@@ -43,5 +43,10 @@ public class ValueExprAST<T> extends ExprAST<T> {
         sb.append(t).append(link).append(value);
 
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toTreeString(0);
     }
 }

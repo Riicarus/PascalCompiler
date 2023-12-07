@@ -23,6 +23,11 @@ public class FunctionAST<T> extends AbstractAST<T> {
     }
 
     @Override
+    public T execute() {
+        return null;
+    }
+
+    @Override
     public String toTreeString(int level) {
         return null;
     }

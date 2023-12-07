@@ -28,8 +28,8 @@ public class DoubleMinusOpExprAST extends ExprAST<Double> {
     }
 
     @Override
-    public String toString() {
-        return toTreeString(0);
+    public Double execute() {
+        return left.execute() - right.execute();
     }
 
     @Override
@@ -49,5 +49,8 @@ public class DoubleMinusOpExprAST extends ExprAST<Double> {
         return sb.toString();
     }
 
-
+    @Override
+    public String toString() {
+        return toTreeString(0);
+    }
 }

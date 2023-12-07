@@ -27,8 +27,8 @@ public class DoubleTimesOpExprAST extends ExprAST<Double> {
     }
 
     @Override
-    public String toString() {
-        return toTreeString(0);
+    public Double execute() {
+        return left.execute() * right.execute();
     }
 
     @Override
@@ -46,5 +46,10 @@ public class DoubleTimesOpExprAST extends ExprAST<Double> {
                 .append(right.toTreeString(level + 1));
 
         return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return toTreeString(0);
     }
 }

@@ -2,9 +2,9 @@ import io.github.riicarus.common.ast.expr.DoubleMinusOpExprAST;
 import io.github.riicarus.common.ast.expr.DoubleTimesOpExprAST;
 import io.github.riicarus.common.ast.expr.ExprAST;
 import io.github.riicarus.common.ast.expr.ValueExprAST;
-import io.github.riicarus.common.data.AbstractAST;
 import io.github.riicarus.common.data.AstConstructStrategy;
 import io.github.riicarus.common.data.AstConstructor;
+import io.github.riicarus.common.data.SyntaxParseResult;
 import io.github.riicarus.front.lex.Lexer;
 import io.github.riicarus.front.lex.PascalLexer;
 import io.github.riicarus.front.syntax.SyntaxSymbol;
@@ -106,8 +106,8 @@ public class SyntaxTest {
     @Test
     public void testLL1SyntaxInlineDefinerParse() {
         init();
-        final AbstractAST<?> ast = pascalSyntaxer.parse(lexer.parse("3 - 4 * 5 - 7 * 8 - 0 ".toCharArray()), lexer.getAssistantLexSymbolSet(), strategy);
-        System.out.println(ast);
+        final SyntaxParseResult result = pascalSyntaxer.parse(lexer.parse("3 - 4 * 5 - 7 * 8 - 0 ".toCharArray()), lexer.getAssistantLexSymbolSet(), strategy);
+        System.out.println(result.getAst().execute());
     }
 
 }
