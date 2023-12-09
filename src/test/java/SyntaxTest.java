@@ -76,7 +76,8 @@ public class SyntaxTest {
     );
     AstConstructStrategy strategy = new AstConstructStrategy();
 
-    LL1SyntaxInlineDefiner definer = new LL1SyntaxInlineDefiner(eps, E, opPrecedenceMap, strategy);
+    LL1SyntaxInlineDefiner definer = new LL1SyntaxInlineDefiner(eps, E, strategy);
+    // LL1SyntaxInlineDefiner definer = new LL1SyntaxInlineDefiner(eps, E, opPrecedenceMap, strategy);
 
     Lexer lexer = new PascalLexer();
     Syntaxer pascalSyntaxer;
