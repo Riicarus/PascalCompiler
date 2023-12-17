@@ -3,10 +3,7 @@ package io.github.riicarus.front.lex;
 import io.github.riicarus.common.data.Token;
 import io.github.riicarus.common.util.CharUtil;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 词法解析器.
@@ -79,7 +76,7 @@ public class PascalLexer implements Lexer {
     private Token parseOne() {
         char[] s = Arrays.copyOfRange(buffer, cur, buffer.length);
 
-        final Token token = LexicalSymbol.validateLongest(String.valueOf(s), Set.of(PascalLexicalSymbol.values()));
+        final Token token = LexicalSymbol.validateLongest(String.valueOf(s), List.of(PascalLexicalSymbol.values()));
 
         if (token == null) throw new IllegalStateException("PascalLexer: Wrong syntax \"" + buffer[cur] + "\", line: " + line + ", idx: " + lineIdx);
 
