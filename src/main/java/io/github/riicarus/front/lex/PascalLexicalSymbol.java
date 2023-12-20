@@ -4,6 +4,7 @@ import io.github.riicarus.common.data.Token;
 import io.github.riicarus.common.util.CharUtil;
 
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 类 Pascal 语言单词符号.
@@ -16,23 +17,60 @@ import java.util.Set;
  */
 public enum PascalLexicalSymbol implements LexicalSymbol {
 
-    BEGIN("begin", 1, "begin"), END("end", 2, "end"),
-    INTEGER("integer", 3, "integer"),
-    IF("if", 4, "if"), THEN("then", 5, "then"), ELSE("else", 6, "else"),
-    FUNC("function", 7, "function"),
-    READ("read", 8, "read"), WRITE("write", 9, "write"),
-    IDENTIFIER("identifier", 10, true, CharUtil.IDENTIFIER_REGEX),
-    CONST("constant", 11, true, CharUtil.NUMBER_REGEX),
-    EQ("=", 12, "="), NE("<>", 13, "<>"),
-    LE("<=", 14, "<="), LT("<", 15, "<"),
-    GE(">=", 16, ">="), GT(">", 17, ">"),
-    MINUS("-", 18, "-"), TIMES("*", 19, "\\*"),
-    ASSIGN(":=", 20, ":="),
-    L_PAREN("(", 21, "\\("), R_PAREN(")", 22, "\\)"),
-    SEMICOLON(";", 23, ";"),
-    EMPTY_SPACE(" ", 24, "( )( )*"),
-    EOL("EOL", 25, "(\r)*\n"), EOF("EOF", 26, String.valueOf((char) 26)),
-    LEX_END(String.valueOf(CharUtil.LEX_SYNTAX_END), 27, String.valueOf(CharUtil.LEX_SYNTAX_END));
+    // 关键字
+    INTEGER("integer", "integer"),
+    BOOLEAN("boolean", "boolean"),
+    FLOAT("float", "float"),
+    STRING("string", "string"),
+    VOID("void", "void"),
+    NULL("null", "null"),
+    FUNC_TYPE("function", "function"),
+    FUNC_DEF("func", "func"),
+    CONTINUE("continue", "continue"),
+    BREAK("break", "break"),
+    RETURN("return", "return"),
+    IF("if", "if"),
+    ELSE("else", "else"),
+    ELSE_IF("elseif", "elseif"),
+    FOR("for", "for"),
+    TRUE("true", "true"),
+    FALSE("false", "false"),
+
+    // 变量,
+    IDENTIFIER("identifier", true, CharUtil.IDENTIFIER_REGEX),
+    CONST_INT("constInt", true, CharUtil.NUMBER_REGEX),
+    CONST_STRING("constString", true, CharUtil.STRING_REGEX),
+    CONST_FLOAT("constFloat", true, CharUtil.FLOAT_REGEX),
+
+    // 符号
+    EQ("==", "=="),
+    NE("!=", "!="),
+    LE("<=", "<="),
+    LT("<", "<"),
+    GE(">=", ">="),
+    GT(">", ">"),
+    MINUS("-", "-"),
+    PLUS("+", "+"),
+    TIMES("*", "\\*"),
+    DIVIDES("/", "/"),
+    OR("|", "\\|"),
+    AND("&", "&"),
+    NOT("!", "!"),
+    ASSIGN(":=", ":="),
+    FUNC_ARG_TRANS("=>", "=>"),
+    L_PAREN("(", "\\("),
+    R_PAREN(")", "\\)"),
+    L_BRACKET("[", "["),
+    R_BRACKET("]", "]"),
+    L_BRACE("{", "{"),
+    R_BRACE("}", "}"),
+    SEMICOLON(";", ";"),
+    COLON(",", ","),
+    EMPTY_SPACE(" ", "( )( )*"),
+    EOL("EOL", "(\r)*\n"), EOF("EOF", String.valueOf((char) 26)),
+    LEX_END(String.valueOf(CharUtil.LEX_SYNTAX_END), String.valueOf(CharUtil.LEX_SYNTAX_END));
+
+    private final AtomicInteger ID_GENERATOR = new AtomicInteger(1);
 
     private final String name;
 
@@ -42,16 +80,16 @@ public enum PascalLexicalSymbol implements LexicalSymbol {
 
     private final DFA dfa;
 
-    PascalLexicalSymbol(String name, int code, boolean needPrintVal, String regex) {
+    PascalLexicalSymbol(String name, boolean needPrintVal, String regex) {
         this.name = name;
-        this.code = code;
+        this.code = ID_GENERATOR.getAndIncrement();
         this.needPrintVal = needPrintVal;
         this.dfa = DFA.nfaToDfa(RegexParser.reToNFA(regex, CharUtil.PASCAL_CHAR_SET), CharUtil.PASCAL_CHAR_SET);
     }
 
-    PascalLexicalSymbol(String name, int code, String regex) {
+    PascalLexicalSymbol(String name, String regex) {
         this.name = name;
-        this.code = code;
+        this.code = ID_GENERATOR.getAndIncrement();
         this.needPrintVal = false;
         this.dfa = DFA.nfaToDfa(RegexParser.reToNFA(regex, CharUtil.PASCAL_CHAR_SET), CharUtil.PASCAL_CHAR_SET);
     }

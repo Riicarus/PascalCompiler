@@ -18,19 +18,26 @@ public class SyntaxTest {
     @Test
     public void testLL1SyntaxInlineDefinerParse() {
         String s = """
-                begin
+                {
                   integer k;
                   integer k;
-                  integer function F(n);
-                    begin
+                  integer function(integer) func F(integer n) {
                       integer n;
-                      if n<=0 then F:=1
-                      else F:=n*F(n-1);
-                    end;
+                      if (n <= 0) {
+                          F := 1;
+                      } elseif (n == 1) {
+                          F := 10;
+                      } else {
+                          F := n * F(n - 1);
+                      }
+                  }
+                  for (integer i := 0, k := 9; i < 10; i := i + 1) {
+                      k := i;
+                  }
                   read(m);
                   k:=F(m);
                   write(k);
-                end
+                }
                 """;
 
         final List<Token> tokenList = lexer.parse(s.toCharArray());
