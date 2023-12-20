@@ -73,12 +73,13 @@ $$
 
 & 代码块中的单个语句 \\
 & Statement \to Define \\
-& Statement \to Id \; AssignOrFuncCallSuf; \\
+& Statement \to AssignOrFuncCall \\
 & Statement \to Control \\
 & Statement \to BracedCodeBlock \\
 \\
 
-& 赋值或值语句后缀 \\
+& 赋值或函数调用语句 \\
+& AssignOrFuncCall \to Id \; AssignOrFuncCallSuf; \\
 & AssignOrFuncCallSuf \to AssignSuf \\
 & AssignOrFuncCallSuf \to FuncCallSuf \\
 & AssignSuf \to := ValueExpr \\

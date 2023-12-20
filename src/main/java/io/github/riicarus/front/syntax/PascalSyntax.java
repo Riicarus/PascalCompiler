@@ -67,6 +67,7 @@ public class PascalSyntax {
     private static final SyntaxSymbol NonNullCodeBlock = new LL1SyntaxSymbol("NonNullCodeBlock");
     private static final SyntaxSymbol BracedCodeBlock = new LL1SyntaxSymbol("BracedCodeBlock");
     private static final SyntaxSymbol Statement = new LL1SyntaxSymbol("Statement");
+    private static final SyntaxSymbol AssignOrFuncCall = new LL1SyntaxSymbol("AssignOrFuncCall");
     private static final SyntaxSymbol AssignOrFuncCallSuf = new LL1SyntaxSymbol("AssignOrFuncCallSuf");
     private static final SyntaxSymbol AssignSuf = new LL1SyntaxSymbol("AssignSuf");
     private static final SyntaxSymbol StatementList = new LL1SyntaxSymbol("StatementList");
@@ -144,10 +145,11 @@ public class PascalSyntax {
         definer.addProduction(NonNullCodeBlock, List.of(Statement), null);
 
         definer.addProduction(Statement, List.of(Define), null);
-        definer.addProduction(Statement, List.of(Id, AssignOrFuncCallSuf, semicolon), null);
+        definer.addProduction(Statement, List.of(AssignOrFuncCall), null);
         definer.addProduction(Statement, List.of(Control), null);
         definer.addProduction(Statement, List.of(BracedCodeBlock), null);
 
+        definer.addProduction(AssignOrFuncCall, List.of(Id, AssignOrFuncCallSuf, semicolon), null);
         definer.addProduction(AssignOrFuncCallSuf, List.of(AssignSuf), null);
         definer.addProduction(AssignOrFuncCallSuf, List.of(FuncCallSuf), null);
         definer.addProduction(AssignSuf, List.of(assign, ValueExpr), null);
