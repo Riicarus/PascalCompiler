@@ -1,5 +1,6 @@
 package io.github.riicarus.front.syntax;
 
+import io.github.riicarus.common.ast.detailed.*;
 import io.github.riicarus.front.syntax.ll1.LL1SyntaxInlineDefiner;
 import io.github.riicarus.front.syntax.ll1.LL1SyntaxSymbol;
 import io.github.riicarus.front.syntax.ll1.LL1Syntaxer;
@@ -16,8 +17,8 @@ import java.util.List;
 public class PascalSyntax {
 
     private static final SyntaxSymbol eps = new LL1SyntaxSymbol("eps", true);
-    private static final SyntaxSymbol integer = new LL1SyntaxSymbol("integer", true);
-    private static final SyntaxSymbol _boolean = new LL1SyntaxSymbol("boolean", true);
+    private static final SyntaxSymbol _int = new LL1SyntaxSymbol("int", true);
+    private static final SyntaxSymbol bool = new LL1SyntaxSymbol("bool", true);
     private static final SyntaxSymbol _float = new LL1SyntaxSymbol("float", true);
     private static final SyntaxSymbol string = new LL1SyntaxSymbol("string", true);
     private static final SyntaxSymbol _void = new LL1SyntaxSymbol("void", true);
@@ -29,7 +30,7 @@ public class PascalSyntax {
     private static final SyntaxSymbol _return = new LL1SyntaxSymbol("return", true);
     private static final SyntaxSymbol _if = new LL1SyntaxSymbol("if", true);
     private static final SyntaxSymbol _else = new LL1SyntaxSymbol("else", true);
-    private static final SyntaxSymbol _elseif = new LL1SyntaxSymbol("elseif", true);
+    private static final SyntaxSymbol elseif = new LL1SyntaxSymbol("elseif", true);
     private static final SyntaxSymbol _for = new LL1SyntaxSymbol("for", true);
     private static final SyntaxSymbol _true = new LL1SyntaxSymbol("true", true);
     private static final SyntaxSymbol _false = new LL1SyntaxSymbol("false", true);
@@ -128,6 +129,8 @@ public class PascalSyntax {
     private static final SyntaxSymbol ForAssignOrDefine = new LL1SyntaxSymbol("ForAssignOrDefine");
     private static final SyntaxSymbol ForCondition = new LL1SyntaxSymbol("ForCondition");
     private static final SyntaxSymbol ForUpdate = new LL1SyntaxSymbol("ForUpdate");
+    private static final SyntaxSymbol ForUpdateList = new LL1SyntaxSymbol("ForUpdateList");
+    private static final SyntaxSymbol ForUpdateListSuf = new LL1SyntaxSymbol("ForUpdateListSuf");
     private static final SyntaxSymbol ForBody = new LL1SyntaxSymbol("ForBody");
 
     private static final LL1SyntaxInlineDefiner definer = new LL1SyntaxInlineDefiner(eps, Program);
@@ -136,172 +139,175 @@ public class PascalSyntax {
 
     static {
         // 程序
-        definer.addProduction(Program, List.of(BracedCodeBlock), null);
-        definer.addProduction(Program, List.of(eps), null);
+        definer.addProduction(Program, List.of(BracedCodeBlock), ProgramToCodeNode.CREATOR);
+        definer.addProduction(Program, List.of(eps), ProgramEmptyNode.CREATOR);
 
         // 代码块
-        definer.addProduction(BracedCodeBlock, List.of(lBrace, StatementList, rBrace), null);
+        definer.addProduction(BracedCodeBlock, List.of(lBrace, StatementList, rBrace), BracedCodeBlockNode.CREATOR);
 
-        definer.addProduction(NonNullCodeBlock, List.of(Statement), null);
+        definer.addProduction(NonNullCodeBlock, List.of(Statement), NonNullCodeBlockNode.CREATOR);
 
-        definer.addProduction(Statement, List.of(Define), null);
-        definer.addProduction(Statement, List.of(AssignOrFuncCall), null);
-        definer.addProduction(Statement, List.of(Control), null);
-        definer.addProduction(Statement, List.of(BracedCodeBlock), null);
+        definer.addProduction(Statement, List.of(Define), StatementToDefineNode.CREATOR);
+        definer.addProduction(Statement, List.of(AssignOrFuncCall), StatementToAssignOrFuncCallNode.CREATOR);
+        definer.addProduction(Statement, List.of(Control), StatementToControlNode.CREATOR);
+        definer.addProduction(Statement, List.of(BracedCodeBlock), StatementToBracedCodeBlockNode.CREATOR);
 
-        definer.addProduction(AssignOrFuncCall, List.of(Id, AssignOrFuncCallSuf, semicolon), null);
-        definer.addProduction(AssignOrFuncCallSuf, List.of(AssignSuf), null);
-        definer.addProduction(AssignOrFuncCallSuf, List.of(FuncCallSuf), null);
-        definer.addProduction(AssignSuf, List.of(assign, ValueExpr), null);
+        definer.addProduction(AssignOrFuncCall, List.of(Id, AssignOrFuncCallSuf, semicolon), AssignOrFuncCallNode.CREATOR);
+        definer.addProduction(AssignOrFuncCallSuf, List.of(AssignSuf), AssignOrFuncCallSufToAssignSufNode.CREATOR);
+        definer.addProduction(AssignOrFuncCallSuf, List.of(FuncCallSuf), AssignOrFuncCallSufToFuncCallSufNode.CREATOR);
+        definer.addProduction(AssignSuf, List.of(assign, ValueExpr), AssignSufNode.CREATOR);
 
-        definer.addProduction(StatementList, List.of(Statement, StatementList), null);
-        definer.addProduction(StatementList, List.of(eps), null);
+        definer.addProduction(StatementList, List.of(Statement, StatementList), StatementListToStatementNode.CREATOR);
+        definer.addProduction(StatementList, List.of(eps), StatementListEmptyNode.CREATOR);
 
         // 定义语句
-        definer.addProduction(Define, List.of(Type, VarDef), null);
+        definer.addProduction(Define, List.of(Type, VarDef), DefineNode.CREATOR);
 
-        definer.addProduction(VarDef, List.of(Id, VarInit), null);
-        definer.addProduction(VarDef, List.of(func, Id, lParen, FuncArgListDef, rParen, BracedCodeBlock), null);
+        definer.addProduction(VarDef, List.of(Id, VarInit), VarDefToCommonVarNode.CREATOR);
+        definer.addProduction(VarDef, List.of(func, Id, lParen, FuncArgListDef, rParen, BracedCodeBlock), VarDefToFuncVarNode.CREATOR);
 
-        definer.addProduction(Id, List.of(identifier), null);
+        definer.addProduction(Id, List.of(identifier), IdNode.CREATOR);
 
-        definer.addProduction(VarInit, List.of(AssignSuf, semicolon), null);
-        definer.addProduction(VarInit, List.of(semicolon), null);
+        definer.addProduction(VarInit, List.of(AssignSuf, semicolon), VarInitToAssignSufNode.CREATOR);
+        definer.addProduction(VarInit, List.of(semicolon), VarInitToSemicolonNode.CREATOR);
 
-        definer.addProduction(FuncArgListDef, List.of(FuncArgDef, FuncArgListDefSuf), null);
-        definer.addProduction(FuncArgListDef, List.of(eps), null);
-        definer.addProduction(FuncArgListDefSuf, List.of(colon, FuncArgDef, FuncArgListDefSuf), null);
-        definer.addProduction(FuncArgListDefSuf, List.of(eps), null);
-        definer.addProduction(FuncArgDef, List.of(Type, Id), null);
+        definer.addProduction(FuncArgListDef, List.of(FuncArgDef, FuncArgListDefSuf), FuncArgListDefToFuncArgDefNode.CREATOR);
+        definer.addProduction(FuncArgListDef, List.of(eps), FuncArgListDefEmptyNode.CREATOR);
+        definer.addProduction(FuncArgListDefSuf, List.of(colon, FuncArgDef, FuncArgListDefSuf), FuncArgListDefSufToFuncArgDefNode.CREATOR);
+        definer.addProduction(FuncArgListDefSuf, List.of(eps), FuncArgListDefSufEmptyNode.CREATOR);
+        definer.addProduction(FuncArgDef, List.of(Type, Id), FuncArgDefNode.CREATOR);
 
-        definer.addProduction(Type, List.of(BaseType, TypeSuf), null);
-        definer.addProduction(Type, List.of(VoidFuncType, TypeSuf), null);
-        definer.addProduction(TypeSuf, List.of(function, lParen, FuncArgTypeDef, rParen, TypeSuf), null);
-        definer.addProduction(TypeSuf, List.of(lBracket, ArraySize, rBracket, TypeSuf), null);
-        definer.addProduction(TypeSuf, List.of(eps), null);
+        definer.addProduction(Type, List.of(BaseType, TypeSuf), TypeToBaseTypeNode.CREATOR);
+        definer.addProduction(Type, List.of(VoidFuncType, TypeSuf), TypeToVoidFuncTypeNode.CREATOR);
+        definer.addProduction(TypeSuf, List.of(function, lParen, FuncArgTypeDef, rParen, TypeSuf), TypeSufToFuncNode.CREATOR);
+        definer.addProduction(TypeSuf, List.of(lBracket, ArraySize, rBracket, TypeSuf), TypeSufToArrayNode.CREATOR);
+        definer.addProduction(TypeSuf, List.of(eps), TypeSufEmptyNode.CREATOR);
 
-        definer.addProduction(BaseType, List.of(integer), null);
-        definer.addProduction(BaseType, List.of(_boolean), null);
-        definer.addProduction(BaseType, List.of(_float), null);
-        definer.addProduction(BaseType, List.of(string), null);
+        definer.addProduction(BaseType, List.of(_int), BaseTypeToIntNode.CREATOR);
+        definer.addProduction(BaseType, List.of(bool), BaseTypeToBoolNode.CREATOR);
+        definer.addProduction(BaseType, List.of(_float), BaseTypeToFloatNode.CREATOR);
+        definer.addProduction(BaseType, List.of(string), BaseTypeToStringNode.CREATOR);
 
-        definer.addProduction(VoidFuncType, List.of(_void, function, lParen, FuncArgTypeDef, rParen), null);
+        definer.addProduction(VoidFuncType, List.of(_void, function, lParen, FuncArgTypeDef, rParen), VoidFuncTypeNode.CREATOR);
 
-        definer.addProduction(FuncArgTypeDef, List.of(Type, FuncArgTypeDefSuf), null);
-        definer.addProduction(FuncArgTypeDef, List.of(eps), null);
-        definer.addProduction(FuncArgTypeDefSuf, List.of(colon, Type, FuncArgTypeDefSuf), null);
-        definer.addProduction(FuncArgTypeDefSuf, List.of(eps), null);
+        definer.addProduction(FuncArgTypeDef, List.of(Type, FuncArgTypeDefSuf), FuncArgTypeDefToTypeNode.CREATOR);
+        definer.addProduction(FuncArgTypeDef, List.of(eps), FuncArgTypeDefEmptyNode.CREATOR);
+        definer.addProduction(FuncArgTypeDefSuf, List.of(colon, Type, FuncArgTypeDefSuf), FuncArgTypeDefSufToTypeNode.CREATOR);
+        definer.addProduction(FuncArgTypeDefSuf, List.of(eps), FuncArgTypeDefSufEmptyNode.CREATOR);
 
-        definer.addProduction(ArraySize, List.of(Id), null);
-        definer.addProduction(ArraySize, List.of(constInt), null);
-        definer.addProduction(ArraySize, List.of(eps), null);
+        definer.addProduction(ArraySize, List.of(Id), ArraySizeToIdNode.CREATOR);
+        definer.addProduction(ArraySize, List.of(constInt), ArraySizeToConstIntNode.CREATOR);
+        definer.addProduction(ArraySize, List.of(eps), ArraySizeEmptyNode.CREATOR);
 
 
         // 值语句
-        definer.addProduction(ValueExpr, List.of(LogicItem, LogicExprSuf), null);
-        definer.addProduction(LogicExprSuf, List.of(or, LogicItem, LogicExprSuf), null);
-        definer.addProduction(LogicExprSuf, List.of(eps), null);
-        definer.addProduction(LogicItem, List.of(LogicFactor, LogicItemSuf), null);
-        definer.addProduction(LogicItemSuf, List.of(and, LogicFactor, LogicItemSuf), null);
-        definer.addProduction(LogicItemSuf, List.of(eps), null);
-        definer.addProduction(LogicFactor, List.of(not, RelExpr), null);
-        definer.addProduction(LogicFactor, List.of(RelExpr), null);
+        definer.addProduction(ValueExpr, List.of(LogicItem, LogicExprSuf), ValueExprNode.CREATOR);
+        definer.addProduction(LogicExprSuf, List.of(or, LogicItem, LogicExprSuf), LogicExprSufToOrNode.CREATOR);
+        definer.addProduction(LogicExprSuf, List.of(eps), LogicExprSufEmptyNode.CREATOR);
+        definer.addProduction(LogicItem, List.of(LogicFactor, LogicItemSuf), LogicItemNode.CREATOR);
+        definer.addProduction(LogicItemSuf, List.of(and, LogicFactor, LogicItemSuf), LogicItemSufToAndNode.CREATOR);
+        definer.addProduction(LogicItemSuf, List.of(eps), LogicItemSufEmptyNode.CREATOR);
+        definer.addProduction(LogicFactor, List.of(not, RelExpr), LogicFactorToNotNode.CREATOR);
+        definer.addProduction(LogicFactor, List.of(RelExpr), LogicFactorToRelExprNode.CREATOR);
 
-        definer.addProduction(RelExpr, List.of(ArithExpr, RelExprSuf), null);
-        definer.addProduction(RelExprSuf, List.of(RelOp, ArithExpr, RelExprSuf), null);
-        definer.addProduction(RelExprSuf, List.of(eps), null);
+        definer.addProduction(RelExpr, List.of(ArithExpr, RelExprSuf), RelExprNode.CREATOR);
+        definer.addProduction(RelExprSuf, List.of(RelOp, ArithExpr, RelExprSuf), RelExprSufToRelOpNode.CREATOR);
+        definer.addProduction(RelExprSuf, List.of(eps), RelExprSufEmptyNode.CREATOR);
 
-        definer.addProduction(RelOp, List.of(lt), null);
-        definer.addProduction(RelOp, List.of(gt), null);
-        definer.addProduction(RelOp, List.of(le), null);
-        definer.addProduction(RelOp, List.of(ge), null);
-        definer.addProduction(RelOp, List.of(eq), null);
-        definer.addProduction(RelOp, List.of(ne), null);
+        definer.addProduction(RelOp, List.of(lt), RelOpToLTNode.CREATOR);
+        definer.addProduction(RelOp, List.of(gt), RelOpToGTNode.CREATOR);
+        definer.addProduction(RelOp, List.of(le), RelOpToLENode.CREATOR);
+        definer.addProduction(RelOp, List.of(ge), RelOpToGENode.CREATOR);
+        definer.addProduction(RelOp, List.of(eq), RelOpToEQNode.CREATOR);
+        definer.addProduction(RelOp, List.of(ne), RelOpToNENode.CREATOR);
 
-        definer.addProduction(ArithExpr, List.of(ArithItem, ArithExprSuf), null);
-        definer.addProduction(ArithExprSuf, List.of(minus, ArithItem, ArithExprSuf), null);
-        definer.addProduction(ArithExprSuf, List.of(plus, ArithItem, ArithExprSuf), null);
-        definer.addProduction(ArithExprSuf, List.of(eps), null);
-        definer.addProduction(ArithItem, List.of(PrimExpr, ArithItemSuf), null);
-        definer.addProduction(ArithItemSuf, List.of(times, PrimExpr, ArithItemSuf), null);
-        definer.addProduction(ArithItemSuf, List.of(divides, PrimExpr, ArithItemSuf), null);
-        definer.addProduction(ArithItemSuf, List.of(eps), null);
+        definer.addProduction(ArithExpr, List.of(ArithItem, ArithExprSuf), ArithExprNode.CREATOR);
+        definer.addProduction(ArithExprSuf, List.of(minus, ArithItem, ArithExprSuf), ArithExprSufToMinusNode.CREATOR);
+        definer.addProduction(ArithExprSuf, List.of(plus, ArithItem, ArithExprSuf), ArithExprSufToPlusNode.CREATOR);
+        definer.addProduction(ArithExprSuf, List.of(eps), ArithExprSufEmptyNode.CREATOR);
+        definer.addProduction(ArithItem, List.of(PrimExpr, ArithItemSuf), ArithItemNode.CREATOR);
+        definer.addProduction(ArithItemSuf, List.of(times, PrimExpr, ArithItemSuf), ArithItemSufToTimesNode.CREATOR);
+        definer.addProduction(ArithItemSuf, List.of(divides, PrimExpr, ArithItemSuf), ArithItemSufToDivideNode.CREATOR);
+        definer.addProduction(ArithItemSuf, List.of(eps), ArithItemSufEmptyNode.CREATOR);
 
-        definer.addProduction(PrimExpr, List.of(lParen, ValueExprOrFuncInlineDefSuf), null);
-        definer.addProduction(PrimExpr, List.of(Const), null);
-        definer.addProduction(PrimExpr, List.of(Id, FuncCallSuf), null);
+        definer.addProduction(PrimExpr, List.of(lParen, ValueExprOrFuncInlineDefSuf), PrimExprToValueOrFuncDefNode.CREATOR);
+        definer.addProduction(PrimExpr, List.of(Const), PrimExprToConstNode.CREATOR);
+        definer.addProduction(PrimExpr, List.of(Id, FuncCallSuf), PrimExprToIdOrFuncCallNode.CREATOR);
 
-        definer.addProduction(ValueExprOrFuncInlineDefSuf, List.of(ValueExpr, rParen), null);
-        definer.addProduction(ValueExprOrFuncInlineDefSuf, List.of(FuncInlineDefSuf), null);
+        definer.addProduction(ValueExprOrFuncInlineDefSuf, List.of(ValueExpr, rParen), ValueExprOrFuncInlineDefSufToValueNode.CREATOR);
+        definer.addProduction(ValueExprOrFuncInlineDefSuf, List.of(FuncInlineDefSuf), ValueExprOrFuncInlineDefSufToFuncDefNode.CREATOR);
 
-        definer.addProduction(Const, List.of(constInt), null);
-        definer.addProduction(Const, List.of(constFloat), null);
-        definer.addProduction(Const, List.of(constString), null);
-        definer.addProduction(Const, List.of(_true), null);
-        definer.addProduction(Const, List.of(_false), null);
-        definer.addProduction(Const, List.of(_null), null);
+        definer.addProduction(Const, List.of(constInt), ConstToIntNode.CREATOR);
+        definer.addProduction(Const, List.of(constFloat), ConstToFloatNode.CREATOR);
+        definer.addProduction(Const, List.of(constString), ConstToStringNode.CREATOR);
+        definer.addProduction(Const, List.of(_true), ConstToTrueNode.CREATOR);
+        definer.addProduction(Const, List.of(_false), ConstToFloatNode.CREATOR);
+        definer.addProduction(Const, List.of(_null), ConstToNullNode.CREATOR);
 
-        definer.addProduction(FuncCallSuf, List.of(lParen, FuncCallArgs, rParen), null);
-        definer.addProduction(FuncCallSuf, List.of(eps), null);
-        definer.addProduction(FuncCallArgs, List.of(ValueExpr, FuncCallArgsSuf), null);
-        definer.addProduction(FuncCallArgs, List.of(eps), null);
-        definer.addProduction(FuncCallArgsSuf, List.of(colon, ValueExpr, FuncCallArgsSuf), null);
-        definer.addProduction(FuncCallArgsSuf, List.of(eps), null);
+        definer.addProduction(FuncCallSuf, List.of(lParen, FuncCallArgs, rParen), FuncCallSufToParenNode.CREATOR);
+        definer.addProduction(FuncCallSuf, List.of(eps), FuncCallSufEmptyNode.CREATOR);
+        definer.addProduction(FuncCallArgs, List.of(ValueExpr, FuncCallArgsSuf), FuncCallArgsToValueExprNode.CREATOR);
+        definer.addProduction(FuncCallArgs, List.of(eps), FuncCallArgsEmptyNode.CREATOR);
+        definer.addProduction(FuncCallArgsSuf, List.of(colon, ValueExpr, FuncCallArgsSuf), FuncCallArgsSufToValueExprNode.CREATOR);
+        definer.addProduction(FuncCallArgsSuf, List.of(eps), FuncCallArgsSufEmptyNode.CREATOR);
 
-        definer.addProduction(FuncInlineDefSuf, List.of(FuncArgListDef, rParen, funcArgTrans, BracedCodeBlock), null);
+        definer.addProduction(FuncInlineDefSuf, List.of(FuncArgListDef, rParen, funcArgTrans, BracedCodeBlock), FuncInlineDefSufNode.CREATOR);
 
         // 控制语句
-        definer.addProduction(Control, List.of(Break, semicolon), null);
-        definer.addProduction(Control, List.of(Continue, semicolon), null);
-        definer.addProduction(Control, List.of(Return, semicolon), null);
-        definer.addProduction(Control, List.of(If), null);
-        definer.addProduction(Control, List.of(Loop), null);
+        definer.addProduction(Control, List.of(Break, semicolon), ControlToBreakNode.CREATOR);
+        definer.addProduction(Control, List.of(Continue, semicolon), ControlToContinueNode.CREATOR);
+        definer.addProduction(Control, List.of(Return, semicolon), ControlToReturnNode.CREATOR);
+        definer.addProduction(Control, List.of(If), ControlToIfNode.CREATOR);
+        definer.addProduction(Control, List.of(Loop), ControlToLoopNode.CREATOR);
 
-        definer.addProduction(Break, List.of(_break), null);
+        definer.addProduction(Break, List.of(_break), BreakNode.CREATOR);
 
-        definer.addProduction(Continue, List.of(_continue), null);
+        definer.addProduction(Continue, List.of(_continue), ContinueNode.CREATOR);
 
-        definer.addProduction(Return, List.of(_return, RetValue), null);
+        definer.addProduction(Return, List.of(_return, RetValue), ReturnNode.CREATOR);
 
-        definer.addProduction(RetValue, List.of(ValueExpr), null);
-        definer.addProduction(RetValue, List.of(eps), null);
+        definer.addProduction(RetValue, List.of(ValueExpr), RetValueToValueExprNode.CREATOR);
+        definer.addProduction(RetValue, List.of(eps), RetValueEmptyNode.CREATOR);
 
         // if 语句
-        definer.addProduction(If, List.of(_if, lParen, ValueExpr, rParen, BracedCodeBlock, Else), null);
+        definer.addProduction(If, List.of(_if, lParen, ValueExpr, rParen, BracedCodeBlock, Else), IfNode.CREATOR);
 
-        definer.addProduction(Else, List.of(ElseIfList, EndElse), null);
+        definer.addProduction(Else, List.of(ElseIfList, EndElse), ElseNode.CREATOR);
 
-        definer.addProduction(ElseIfList, List.of(ElseIf, ElseIfList), null);
-        definer.addProduction(ElseIfList, List.of(eps), null);
+        definer.addProduction(ElseIfList, List.of(ElseIf, ElseIfList), ElseIfListToElseIfNode.CREATOR);
+        definer.addProduction(ElseIfList, List.of(eps), ElseIfListEmptyNode.CREATOR);
 
-        definer.addProduction(ElseIf, List.of(_elseif, lParen, ValueExpr, rParen, BracedCodeBlock), null);
+        definer.addProduction(ElseIf, List.of(elseif, lParen, ValueExpr, rParen, BracedCodeBlock), ElseIfNode.CREATOR);
 
-        definer.addProduction(EndElse, List.of(_else, BracedCodeBlock), null);
-        definer.addProduction(EndElse, List.of(eps), null);
+        definer.addProduction(EndElse, List.of(_else, BracedCodeBlock), EndElseToElseNode.CREATOR);
+        definer.addProduction(EndElse, List.of(eps), EndElseEmptyNode.CREATOR);
 
 
         // 循环语句
-        definer.addProduction(Loop, List.of(ForLoop), null);
+        definer.addProduction(Loop, List.of(ForLoop), LoopToForLoopNode.CREATOR);
 
         // For 循环
-        definer.addProduction(ForLoop, List.of(_for, lParen, ForInit, semicolon, ForCondition, semicolon, ForUpdate, rParen, ForBody), null);
+        definer.addProduction(ForLoop, List.of(_for, lParen, ForInit, semicolon, ForCondition, semicolon, ForUpdate, rParen, ForBody), ForLoopNode.CREATOR);
 
-        definer.addProduction(ForInit, List.of(ForInitList), null);
-        definer.addProduction(ForInit, List.of(eps), null);
+        definer.addProduction(ForInit, List.of(ForInitList), ForInitToInitListNode.CREATOR);
+        definer.addProduction(ForInit, List.of(eps), ForInitEmptyNode.CREATOR);
 
-        definer.addProduction(ForInitList, List.of(ForAssignOrDefine, ForInitListSuf), null);
-        definer.addProduction(ForInitListSuf, List.of(colon, ForAssignOrDefine, ForInitListSuf), null);
-        definer.addProduction(ForInitListSuf, List.of(eps), null);
-        definer.addProduction(ForAssignOrDefine, List.of(Type, Id, AssignSuf), null);
-        definer.addProduction(ForAssignOrDefine, List.of(Id, AssignSuf), null);
+        definer.addProduction(ForInitList, List.of(ForAssignOrDefine, ForInitListSuf), ForInitListNode.CREATOR);
+        definer.addProduction(ForInitListSuf, List.of(colon, ForAssignOrDefine, ForInitListSuf), ForInitListSufToForAssignOrDefineNode.CREATOR);
+        definer.addProduction(ForInitListSuf, List.of(eps), ForInitListSufEmptyNode.CREATOR);
+        definer.addProduction(ForAssignOrDefine, List.of(Type, Id, AssignSuf), ForAssignOrDefineToDefineNode.CREATOR);
+        definer.addProduction(ForAssignOrDefine, List.of(Id, AssignSuf), ForAssignOrDefineToAssignNode.CREATOR);
 
-        definer.addProduction(ForCondition, List.of(ValueExpr), null);
-        definer.addProduction(ForCondition, List.of(eps), null);
+        definer.addProduction(ForCondition, List.of(ValueExpr), ForConditionToValueExprNode.CREATOR);
+        definer.addProduction(ForCondition, List.of(eps), ForConditionEmptyNode.CREATOR);
 
-        definer.addProduction(ForUpdate, List.of(ForInitList), null);
-        definer.addProduction(ForUpdate, List.of(eps), null);
+        definer.addProduction(ForUpdate, List.of(ForUpdateList), ForUpdateToUpdateListNode.CREATOR);
+        definer.addProduction(ForUpdate, List.of(eps), ForUpdateEmptyNode.CREATOR);
+        definer.addProduction(ForUpdateList, List.of(Id, AssignSuf, ForUpdateListSuf), ForUpdateListNode.CREATOR);
+        definer.addProduction(ForUpdateListSuf, List.of(colon, Id, AssignSuf, ForUpdateListSuf), ForUpdateListSufToAssignNode.CREATOR);
+        definer.addProduction(ForUpdateListSuf, List.of(eps), ForUpdateListSufEmptyNode.CREATOR);
 
-        definer.addProduction(ForBody, List.of(BracedCodeBlock), null);
+        definer.addProduction(ForBody, List.of(BracedCodeBlock), ForBodyNode.CREATOR);
 
         SYNTAXER = new LL1Syntaxer(definer);
     }

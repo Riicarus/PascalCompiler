@@ -18,8 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public enum PascalLexicalSymbol implements LexicalSymbol {
 
     // 关键字
-    INTEGER("integer", "integer"),
-    BOOLEAN("boolean", "boolean"),
+    INTEGER("int", "int"),
+    BOOLEAN("bool", "bool"),
     FLOAT("float", "float"),
     STRING("string", "string"),
     VOID("void", "void"),

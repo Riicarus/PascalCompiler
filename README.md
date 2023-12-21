@@ -13,9 +13,13 @@ $$
 & false \to false \\
 & constString \to "(char | digit)*" \\
 & constFloat \to number.number \\
+& int \to int \\
+& bool \to bool \\
+& float \to float \\
+& string \to string \\
 & void \to void \\
 & return \to return \\
-& integer \to integer \\
+& int \to int \\
 & if \to if \\
 & else \to else \\
 & elseif \to elseif \\
@@ -130,8 +134,8 @@ $$
 \\
 
 & 基础数据类型定义 \\
-& BaseType \to integer \\
-& BaseType \to boolean \\
+& BaseType \to int \\
+& BaseType \to bool \\
 & BaseType \to float \\
 & BaseType \to string \\
 \\
@@ -202,7 +206,7 @@ $$
 \\
 
 & 值表达式或者变量行内定义 \\
-& ValueExprOrFuncInlineDefSuf \to Value) \\
+& ValueExprOrFuncInlineDefSuf \to ValueExpr) \\
 & ValueExprOrFuncInlineDefSuf \to FuncInlineDefSuf \\
 
 & 常量 \\
@@ -245,7 +249,7 @@ $$
 & Break \to break \\
 \\
 
-& 下一次 \\
+& 下一次循环 \\
 & Continue \to continue \\
 \\
 
@@ -324,8 +328,11 @@ $$
 \\
 
 & For \; 更新 \\
-& ForUpdate \to ForInitList \\
+& ForUpdate \to ForUpdateList \\
 & ForUpdate \to \epsilon \\
+& ForUpdateList \to Id \; AssignSuf \; ForUpdateListSuf \\
+& ForUpdateListSuf \to , \; Id \; AssignSuf \; ForUpdateListSuf \\
+& ForUpdateListSuf \to \epsilon \\
 \\
 
 & For 循环体 \\
