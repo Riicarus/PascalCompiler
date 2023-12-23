@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.IntTypeNode;
 
 /**
  * BaseType -> int
@@ -41,7 +41,7 @@ public class BaseTypeToIntNode extends BaseTypeNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public IntTypeNode toGeneric() {
+        return IntTypeNode.getInstance();
     }
 }

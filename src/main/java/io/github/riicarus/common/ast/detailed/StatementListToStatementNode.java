@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.StatementNode;
 
 /**
  * StatementList -> Statement StatementList
@@ -14,14 +14,14 @@ public class StatementListToStatementNode extends StatementListNode {
 
     public static final DetailedASTCreator<StatementListToStatementNode> CREATOR =
             children -> new StatementListToStatementNode(
-                    (StatementNode) children.get(0),
+                    (DetailedStatementNode) children.get(0),
                     (StatementListNode) children.get(1)
             );
 
-    private final StatementNode statement;
+    private final DetailedStatementNode statement;
     private final StatementListNode statementList;
 
-    public StatementListToStatementNode(StatementNode statement, StatementListNode statementList) {
+    public StatementListToStatementNode(DetailedStatementNode statement, StatementListNode statementList) {
         this.statement = statement;
         this.statementList = statementList;
     }
@@ -44,7 +44,13 @@ public class StatementListToStatementNode extends StatementListNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public StatementNode toGeneric() {
+        StatementNode statementNode = statement.toGeneric();
+        StatementNode nextStatementNode = statementList.toGeneric();
+        if (nextStatementNode != null) {
+            statementNode.setNextStatementNode(nextStatementNode);
+        }
+
+        return statementNode;
     }
 }

@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForConditionNode;
 
 /**
  * ForCondition -> ValueExpr
@@ -10,16 +10,16 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 19:05
  * @since 1.0.0
  */
-public class ForConditionToValueExprNode extends ForConditionNode {
+public class DetailedForConditionToValueExprNode extends DetailedForConditionNode {
 
-    public static final DetailedASTCreator<ForConditionToValueExprNode> CREATOR =
-            children -> new ForConditionToValueExprNode(
+    public static final DetailedASTCreator<DetailedForConditionToValueExprNode> CREATOR =
+            children -> new DetailedForConditionToValueExprNode(
                     (ValueExprNode) children.get(0)
             );
 
     private final ValueExprNode valueExpr;
 
-    public ForConditionToValueExprNode(ValueExprNode valueExpr) {
+    public DetailedForConditionToValueExprNode(ValueExprNode valueExpr) {
         this.valueExpr = valueExpr;
     }
 
@@ -40,7 +40,7 @@ public class ForConditionToValueExprNode extends ForConditionNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ForConditionNode toGeneric() {
+        return new ForConditionNode(valueExpr.toGeneric());
     }
 }

@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.AssignNode;
 
 /**
  * AssignOrFuncCallSuf -> AssignSuf
@@ -40,7 +40,7 @@ public class AssignOrFuncCallSufToAssignSufNode extends AssignOrFuncCallSufNode 
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public AssignNode toGeneric() {
+        return assignSuf.toGeneric();
     }
 }

@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ReturnNode;
 
 /**
  * Control -> Return;
@@ -15,14 +15,14 @@ public class ControlToReturnNode extends ControlNode {
 
     public static final DetailedASTCreator<ControlToReturnNode> CREATOR =
             children -> new ControlToReturnNode(
-                    (ReturnNode) children.get(0),
+                    (DetailedReturnNode) children.get(0),
                     (TerminalASTNode) children.get(1)
             );
 
-    private final ReturnNode _return;
+    private final DetailedReturnNode _return;
     private final TerminalASTNode semicolon;
 
-    public ControlToReturnNode(ReturnNode _return, TerminalASTNode semicolon) {
+    public ControlToReturnNode(DetailedReturnNode _return, TerminalASTNode semicolon) {
         this._return = _return;
         this.semicolon = semicolon;
     }
@@ -45,7 +45,7 @@ public class ControlToReturnNode extends ControlNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ReturnNode toGeneric() {
+        return _return.toGeneric();
     }
 }

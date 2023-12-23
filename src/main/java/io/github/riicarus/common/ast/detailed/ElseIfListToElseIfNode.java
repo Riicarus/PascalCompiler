@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ElseNode;
 
 /**
  * ElseIfList -> ElseIF ElseIfList
@@ -14,14 +14,14 @@ public class ElseIfListToElseIfNode extends ElseIfListNode {
 
     public static final DetailedASTCreator<ElseIfListToElseIfNode> CREATOR =
             children -> new ElseIfListToElseIfNode(
-                    (ElseIfNode) children.get(0),
+                    (DetailedElseIfNode) children.get(0),
                     (ElseIfListNode) children.get(1)
             );
 
-    private final ElseIfNode elseif;
+    private final DetailedElseIfNode elseif;
     private final ElseIfListNode elseIfList;
 
-    public ElseIfListToElseIfNode(ElseIfNode elseif, ElseIfListNode elseIfList) {
+    public ElseIfListToElseIfNode(DetailedElseIfNode elseif, ElseIfListNode elseIfList) {
         this.elseif = elseif;
         this.elseIfList = elseIfList;
     }
@@ -44,7 +44,13 @@ public class ElseIfListToElseIfNode extends ElseIfListNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ElseNode toGeneric() {
+        ElseNode elseNode = elseIfList.toGeneric();
+        if (elseNode == null) {
+            elseNode = new ElseNode();
+        }
+
+        elseNode.addElseIfNode(elseif.toGeneric());
+        return elseNode;
     }
 }

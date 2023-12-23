@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForInitNode;
 
 /**
  * ForInit -> ForInitList
@@ -10,16 +10,16 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 18:46
  * @since 1.0.0
  */
-public class ForInitToInitListNode extends ForInitNode {
+public class DetailedForInitToInitListNode extends DetailedForInitNode {
 
-    public static final DetailedASTCreator<ForInitToInitListNode> CREATOR =
-            children -> new ForInitToInitListNode(
+    public static final DetailedASTCreator<DetailedForInitToInitListNode> CREATOR =
+            children -> new DetailedForInitToInitListNode(
                     (ForInitListNode) children.get(0)
             );
 
     private final ForInitListNode forInitList;
 
-    public ForInitToInitListNode(ForInitListNode forInitList) {
+    public DetailedForInitToInitListNode(ForInitListNode forInitList) {
         this.forInitList = forInitList;
     }
 
@@ -40,7 +40,7 @@ public class ForInitToInitListNode extends ForInitNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ForInitNode toGeneric() {
+        return forInitList.toGeneric();
     }
 }

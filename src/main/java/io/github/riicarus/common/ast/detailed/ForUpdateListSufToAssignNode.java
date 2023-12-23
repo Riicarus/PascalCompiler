@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForUpdateNode;
 
 /**
  * ForUpdateListSuf -> , Id AssignSuf ForUpdateListSuf
@@ -49,7 +49,13 @@ public class ForUpdateListSufToAssignNode extends ForUpdateListSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ForUpdateNode toGeneric() {
+        ForUpdateNode forUpdateNode = forUpdateListSuf.toGeneric();
+        if (forUpdateNode == null) {
+            forUpdateNode = new ForUpdateNode();
+        }
+
+        forUpdateNode.addUpdate(assignSuf.toGeneric());
+        return forUpdateNode;
     }
 }

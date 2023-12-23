@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.abstruct.BinaryOpNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.DividesNode;
 
 /**
  * ArithItemSuf -> / PrimExpr ArithItemSuf
@@ -49,7 +50,16 @@ public class ArithItemSufToDivideNode extends ArithItemSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public DividesNode toGeneric() {
+        DividesNode dividesNode = new DividesNode();
+        dividesNode.setRightOperand(primExpr.toGeneric());
+
+        BinaryOpNode upperOpNode = arithItemSuf.toGeneric();
+        if (upperOpNode != null) {
+            upperOpNode.setLeftOperand(dividesNode);
+            dividesNode.setTopOpNode(upperOpNode.getTopOpNode());
+        }
+
+        return dividesNode;
     }
 }

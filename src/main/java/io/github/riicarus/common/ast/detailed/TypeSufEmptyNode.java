@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.FuncTypeNode;
 
 /**
  * TypeSuf -> eps
@@ -31,7 +31,7 @@ public class TypeSufEmptyNode extends TypeSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public FuncTypeNode toGeneric() {
         return null;
     }
 }

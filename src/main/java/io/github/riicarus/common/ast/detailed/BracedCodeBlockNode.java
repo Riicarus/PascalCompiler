@@ -3,7 +3,8 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.CodeBlockNode;
+import io.github.riicarus.common.data.ast.generic.code.StatementNode;
 
 /**
  * BracedCodeBlock -> { StatementList }
@@ -50,7 +51,17 @@ public class BracedCodeBlockNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public CodeBlockNode toGeneric() {
+        CodeBlockNode codeBlockNode = new CodeBlockNode();
+
+        StatementNode statementNode = statementList.toGeneric();
+        if (statementNode != null) {
+            while (statementNode != null) {
+                codeBlockNode.addStatement(statementNode);
+                statementNode = statementNode.getNextStatementNode();
+            }
+        }
+
+        return codeBlockNode;
     }
 }

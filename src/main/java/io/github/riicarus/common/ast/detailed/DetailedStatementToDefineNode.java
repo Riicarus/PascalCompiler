@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.StatementNode;
 
 /**
  * Statement -> Define
@@ -10,16 +10,16 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 9:29
  * @since 1.0.0
  */
-public class StatementToDefineNode extends StatementNode {
+public class DetailedStatementToDefineNode extends DetailedStatementNode {
 
-    public static final DetailedASTCreator<StatementToDefineNode> CREATOR =
-            children -> new StatementToDefineNode(
+    public static final DetailedASTCreator<DetailedStatementToDefineNode> CREATOR =
+            children -> new DetailedStatementToDefineNode(
                     (DefineNode) children.get(0)
             );
 
     private final DefineNode define;
 
-    public StatementToDefineNode(DefineNode define) {
+    public DetailedStatementToDefineNode(DefineNode define) {
         this.define = define;
     }
 
@@ -34,13 +34,15 @@ public class StatementToDefineNode extends StatementNode {
         }
 
         sb.append(prefix).append(t).append(link).append(symbol)
-                .append(define.toTreeString(level + 1, prefix));
+                .append(define == null ? "" : define.toTreeString(level + 1, prefix));
 
         return sb.toString();
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public StatementNode toGeneric() {
+        StatementNode statementNode = new StatementNode();
+        statementNode.setCurNode(define.toGeneric());
+        return statementNode;
     }
 }

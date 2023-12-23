@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.IfNode;
 
 /**
  * Control -> If
@@ -14,12 +14,12 @@ public class ControlToIfNode extends ControlNode {
 
     public static final DetailedASTCreator<ControlToIfNode> CREATOR =
             children -> new ControlToIfNode(
-                    (IfNode) children.get(0)
+                    (DetailedIfNode) children.get(0)
             );
 
-    private final IfNode _if;
+    private final DetailedIfNode _if;
 
-    public ControlToIfNode(IfNode _if) {
+    public ControlToIfNode(DetailedIfNode _if) {
         this._if = _if;
     }
 
@@ -40,7 +40,7 @@ public class ControlToIfNode extends ControlNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public IfNode toGeneric() {
+        return _if.toGeneric();
     }
 }

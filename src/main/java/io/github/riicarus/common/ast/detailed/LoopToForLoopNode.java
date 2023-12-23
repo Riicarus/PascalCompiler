@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForNode;
 
 /**
  * Loop -> ForLoop
@@ -40,7 +40,7 @@ public class LoopToForLoopNode extends LoopNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ForNode toGeneric() {
+        return forLoop.toGeneric();
     }
 }

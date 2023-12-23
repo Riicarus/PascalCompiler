@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.func.FunctionNode;
+import io.github.riicarus.common.data.ast.generic.type.ProtoTypeNode;
 
 /**
  * VarDef -> func Id(FuncArgListDef) BracedCodeBlock
@@ -16,7 +17,7 @@ public class VarDefToFuncVarNode extends VarDefNode {
     public static final DetailedASTCreator<VarDefToFuncVarNode> CREATOR =
             children -> new VarDefToFuncVarNode(
                     (TerminalASTNode) children.get(0),
-                    (IdNode) children.get(1),
+                    (DetailedIdNode) children.get(1),
                     (TerminalASTNode) children.get(2),
                     (FuncArgListDefNode) children.get(3),
                     (TerminalASTNode) children.get(4),
@@ -24,13 +25,13 @@ public class VarDefToFuncVarNode extends VarDefNode {
             );
 
     private final TerminalASTNode func;
-    private final IdNode id;
+    private final DetailedIdNode id;
     private final TerminalASTNode lParen;
     private final FuncArgListDefNode funcArgListDef;
     private final TerminalASTNode rParen;
     private final BracedCodeBlockNode bracedCodeBlock;
 
-    public VarDefToFuncVarNode(TerminalASTNode func, IdNode id,
+    public VarDefToFuncVarNode(TerminalASTNode func, DetailedIdNode id,
                                TerminalASTNode lParen, FuncArgListDefNode funcArgListDef, TerminalASTNode rParen,
                                BracedCodeBlockNode bracedCodeBlock) {
         this.func = func;
@@ -63,7 +64,13 @@ public class VarDefToFuncVarNode extends VarDefNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public FunctionNode toGeneric() {
+        ProtoTypeNode protoNode = funcArgListDef.toGeneric();
+        protoNode.setBody(bracedCodeBlock.toGeneric());
+        FunctionNode functionNode = new FunctionNode();
+        functionNode.setVarNode(id.toGeneric());
+        functionNode.setProtoTypeNode(protoNode);
+
+        return functionNode;
     }
 }

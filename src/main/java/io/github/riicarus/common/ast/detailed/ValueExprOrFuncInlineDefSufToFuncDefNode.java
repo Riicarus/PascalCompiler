@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.func.FunctionNode;
 
 /**
  * ValueExprOrFuncInlineDefSuf -> FuncInlineDefSuf
@@ -40,7 +40,9 @@ public class ValueExprOrFuncInlineDefSufToFuncDefNode extends ValueExprOrFuncInl
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public FunctionNode toGeneric() {
+        FunctionNode functionNode = new FunctionNode();
+        functionNode.setProtoTypeNode(funcInlineDefSuf.toGeneric());
+        return functionNode;
     }
 }

@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.FuncTypeNode;
 
 /**
  * TypeSuf -> function(FuncArgTypeDef) TypeSuf
@@ -59,7 +59,15 @@ public class TypeSufToFuncNode extends TypeSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public FuncTypeNode toGeneric() {
+        FuncTypeNode funcTypeNode = funcArgTypeDef.toGeneric();
+
+        FuncTypeNode topFuncType = typeSuf.toGeneric();
+        if (topFuncType == null) {
+            return funcTypeNode;
+        }
+
+        topFuncType.deepSetReturnType(funcTypeNode);
+        return topFuncType;
     }
 }

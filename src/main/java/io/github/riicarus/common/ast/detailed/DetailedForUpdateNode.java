@@ -1,6 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForUpdateNode;
 
 /**
  * ForUpdate -> ForInitList | eps
@@ -9,5 +10,7 @@ import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
  * @create 2023-12-21 18:41
  * @since 1.0.0
  */
-public abstract class ForUpdateNode extends NonterminalASTNode {
+public abstract class DetailedForUpdateNode extends NonterminalASTNode {
+    @Override
+    public abstract ForUpdateNode toGeneric();
 }

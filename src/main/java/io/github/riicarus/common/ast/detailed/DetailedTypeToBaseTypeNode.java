@@ -1,7 +1,8 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.FuncTypeNode;
+import io.github.riicarus.common.data.ast.generic.type.TypeNode;
 
 /**
  * Type -> BaseType TypeSuf
@@ -10,10 +11,10 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 10:12
  * @since 1.0.0
  */
-public class TypeToBaseTypeNode extends TypeNode {
+public class DetailedTypeToBaseTypeNode extends DetailedTypeNode {
 
-    public static final DetailedASTCreator<TypeToBaseTypeNode> CREATOR =
-            children -> new TypeToBaseTypeNode(
+    public static final DetailedASTCreator<DetailedTypeToBaseTypeNode> CREATOR =
+            children -> new DetailedTypeToBaseTypeNode(
                     (BaseTypeNode) children.get(0),
                     (TypeSufNode) children.get(1)
             );
@@ -21,7 +22,7 @@ public class TypeToBaseTypeNode extends TypeNode {
     private final BaseTypeNode baseType;
     private final TypeSufNode typeSuf;
 
-    public TypeToBaseTypeNode(BaseTypeNode baseType, TypeSufNode typeSuf) {
+    public DetailedTypeToBaseTypeNode(BaseTypeNode baseType, TypeSufNode typeSuf) {
         this.baseType = baseType;
         this.typeSuf = typeSuf;
     }
@@ -44,7 +45,15 @@ public class TypeToBaseTypeNode extends TypeNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public TypeNode toGeneric() {
+        TypeNode baseTypeNode = baseType.toGeneric();
+
+        FuncTypeNode funcTypeNode = typeSuf.toGeneric();
+        if (funcTypeNode == null) {
+            return baseTypeNode;
+        }
+
+        funcTypeNode.deepSetReturnType(baseTypeNode);
+        return funcTypeNode;
     }
 }

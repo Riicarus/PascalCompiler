@@ -1,7 +1,8 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.FuncTypeNode;
+import io.github.riicarus.common.data.ast.generic.type.TypeNode;
 
 /**
  * Type -> VoidFuncType TypeSuf
@@ -10,10 +11,10 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 10:24
  * @since 1.0.0
  */
-public class TypeToVoidFuncTypeNode extends TypeNode {
+public class DetailedTypeToVoidFuncTypeNode extends DetailedTypeNode {
 
-    public static final DetailedASTCreator<TypeToVoidFuncTypeNode> CREATOR =
-            children -> new TypeToVoidFuncTypeNode(
+    public static final DetailedASTCreator<DetailedTypeToVoidFuncTypeNode> CREATOR =
+            children -> new DetailedTypeToVoidFuncTypeNode(
                     (VoidFuncTypeNode) children.get(0),
                     (TypeSufNode) children.get(1)
             );
@@ -21,7 +22,7 @@ public class TypeToVoidFuncTypeNode extends TypeNode {
     private final VoidFuncTypeNode voidFuncType;
     private final TypeSufNode typeSuf;
 
-    public TypeToVoidFuncTypeNode(VoidFuncTypeNode voidFuncType, TypeSufNode typeSuf) {
+    public DetailedTypeToVoidFuncTypeNode(VoidFuncTypeNode voidFuncType, TypeSufNode typeSuf) {
         this.voidFuncType = voidFuncType;
         this.typeSuf = typeSuf;
     }
@@ -44,7 +45,15 @@ public class TypeToVoidFuncTypeNode extends TypeNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public TypeNode toGeneric() {
+        FuncTypeNode funcTypeNode = voidFuncType.toGeneric();
+
+        FuncTypeNode topFuncType = typeSuf.toGeneric();
+        if (topFuncType == null) {
+            return funcTypeNode;
+        }
+
+        topFuncType.deepSetReturnType(funcTypeNode);
+        return topFuncType;
     }
 }

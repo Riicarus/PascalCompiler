@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.FuncTypeNode;
 
 /**
  * FuncArgTypeDef -> eps
@@ -31,7 +31,7 @@ public class FuncArgTypeDefEmptyNode extends FuncArgTypeDefNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public FuncTypeNode toGeneric() {
+        return new FuncTypeNode();
     }
 }

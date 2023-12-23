@@ -3,6 +3,9 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.func.FunctionCallNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.AssignNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.VariableNode;
 
 /**
  * AssignOrFuncCall -> Id AssignOrFuncCallSuf
@@ -15,14 +18,14 @@ public class AssignOrFuncCallNode extends NonterminalASTNode {
 
     public static final DetailedASTCreator<AssignOrFuncCallNode> CREATOR =
             children -> new AssignOrFuncCallNode(
-                    (IdNode) children.get(0),
+                    (DetailedIdNode) children.get(0),
                     (AssignOrFuncCallSufNode) children.get(1)
             );
 
-    private final IdNode id;
+    private final DetailedIdNode id;
     private final AssignOrFuncCallSufNode assignOrFuncCallSuf;
 
-    public AssignOrFuncCallNode(IdNode id, AssignOrFuncCallSufNode assignOrFuncCallSuf) {
+    public AssignOrFuncCallNode(DetailedIdNode id, AssignOrFuncCallSufNode assignOrFuncCallSuf) {
         this.id = id;
         this.assignOrFuncCallSuf = assignOrFuncCallSuf;
     }
@@ -45,7 +48,19 @@ public class AssignOrFuncCallNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public GenericASTNode toGeneric() {
+        VariableNode varNode = id.toGeneric();
+
+        if (assignOrFuncCallSuf instanceof AssignOrFuncCallSufToFuncCallSufNode) {
+            FunctionCallNode funcCallNode = (FunctionCallNode) assignOrFuncCallSuf.toGeneric();
+            funcCallNode.setFuncId(varNode);
+            return funcCallNode;
+        } else if (assignOrFuncCallSuf instanceof AssignOrFuncCallSufToAssignSufNode) {
+            AssignNode assignNode = (AssignNode) assignOrFuncCallSuf.toGeneric();
+            assignNode.setLeftOperand(varNode);
+            return assignNode;
+        } else {
+            throw new IllegalStateException("LL1Syntax error, can not cast ast node into correct typeNode, node: " + assignOrFuncCallSuf);
+        }
     }
 }

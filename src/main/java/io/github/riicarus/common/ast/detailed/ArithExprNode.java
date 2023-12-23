@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.abstruct.BinaryOpNode;
 
 /**
  * ArithExpr -> ArithItem ArithExprSuf
@@ -44,8 +45,22 @@ public class ArithExprNode extends NonterminalASTNode {
         return sb.toString();
     }
 
+    /**
+     * 注意: 如果是算术表达式而不是单个值, 此处返回的是对应算术表达式的顶层(根) Op 节点.
+     *
+     * @return 算术表达式的顶层节点 Or 单个值.
+     */
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ExprNode toGeneric() {
+        ExprNode itemNode = arithItem.toGeneric();
+
+        BinaryOpNode opNode = arithExprSuf.toGeneric();
+        if (opNode == null) {
+            return itemNode;
+        }
+
+        opNode.setLeftOperand(itemNode);
+        // 注意: 这里应该返回顶层 Op 节点
+        return opNode.getTopOpNode();
     }
 }

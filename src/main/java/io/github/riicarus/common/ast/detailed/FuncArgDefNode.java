@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.VariableNode;
 
 /**
  * FuncArgDef -> Type Id
@@ -15,14 +15,14 @@ public class FuncArgDefNode extends NonterminalASTNode {
 
     public static final DetailedASTCreator<FuncArgDefNode> CREATOR =
             children -> new FuncArgDefNode(
-                    (TypeNode) children.get(0),
-                    (IdNode) children.get(1)
+                    (DetailedTypeNode) children.get(0),
+                    (DetailedIdNode) children.get(1)
             );
 
-    private final TypeNode type;
-    private final IdNode id;
+    private final DetailedTypeNode type;
+    private final DetailedIdNode id;
 
-    public FuncArgDefNode(TypeNode type, IdNode id) {
+    public FuncArgDefNode(DetailedTypeNode type, DetailedIdNode id) {
         this.type = type;
         this.id = id;
     }
@@ -45,7 +45,10 @@ public class FuncArgDefNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public VariableNode toGeneric() {
+        VariableNode varNode = id.toGeneric();
+        varNode.setTypeNode(type.toGeneric());
+
+        return varNode;
     }
 }

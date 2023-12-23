@@ -1,7 +1,9 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.AssignNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.VariableNode;
 
 /**
  * VarDef -> Id VarInit
@@ -14,14 +16,14 @@ public class VarDefToCommonVarNode extends VarDefNode {
 
     public static final DetailedASTCreator<VarDefToCommonVarNode> CREATOR =
             children -> new VarDefToCommonVarNode(
-                    (IdNode) children.get(0),
+                    (DetailedIdNode) children.get(0),
                     (VarInitNode) children.get(1)
             );
 
-    private final IdNode id;
+    private final DetailedIdNode id;
     private final VarInitNode varInit;
 
-    public VarDefToCommonVarNode(IdNode id, VarInitNode varInit) {
+    public VarDefToCommonVarNode(DetailedIdNode id, VarInitNode varInit) {
         this.id = id;
         this.varInit = varInit;
     }
@@ -44,7 +46,15 @@ public class VarDefToCommonVarNode extends VarDefNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ExprNode toGeneric() {
+        VariableNode varNode = id.toGeneric();
+
+        AssignNode assignNode = varInit.toGeneric();
+        if (assignNode == null) {
+            return varNode;
+        }
+
+        assignNode.setLeftOperand(id.toGeneric());
+        return assignNode;
     }
 }

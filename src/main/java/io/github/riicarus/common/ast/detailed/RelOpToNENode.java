@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.relation.NENode;
 
 /**
  * RelOp -> !=
@@ -41,7 +41,7 @@ public class RelOpToNENode extends RelOpNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public NENode toGeneric() {
+        return new NENode();
     }
 }

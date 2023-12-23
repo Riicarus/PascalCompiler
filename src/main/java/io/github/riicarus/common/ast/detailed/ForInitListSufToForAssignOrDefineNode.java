@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForInitNode;
 
 /**
  * ForInitListSuf -> , ForAssignOrDefine ForInitListSuf
@@ -49,7 +49,14 @@ public class ForInitListSufToForAssignOrDefineNode extends ForInitListSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ForInitNode toGeneric() {
+        ForInitNode forInitNode = forInitListSuf.toGeneric();
+        if (forInitNode == null) {
+            forInitNode = new ForInitNode();
+        }
+
+        forInitNode.addInitNode(forAssignOrDefine.toGeneric());
+
+        return forInitNode;
     }
 }

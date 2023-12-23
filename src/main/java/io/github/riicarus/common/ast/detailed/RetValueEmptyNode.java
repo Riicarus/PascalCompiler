@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
 
 /**
  * RetValue -> eps
@@ -31,7 +31,7 @@ public class RetValueEmptyNode extends RetValueNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public ExprNode toGeneric() {
         return null;
     }
 }

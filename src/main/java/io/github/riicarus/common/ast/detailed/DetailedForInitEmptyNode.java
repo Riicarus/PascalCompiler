@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForInitNode;
 
 /**
  * ForInit -> eps
@@ -10,10 +10,10 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 18:56
  * @since 1.0.0
  */
-public class ForInitEmptyNode extends ForInitNode {
+public class DetailedForInitEmptyNode extends DetailedForInitNode {
 
-    public static final DetailedASTCreator<ForInitEmptyNode> CREATOR =
-            children -> new ForInitEmptyNode();
+    public static final DetailedASTCreator<DetailedForInitEmptyNode> CREATOR =
+            children -> new DetailedForInitEmptyNode();
 
     @Override
     public String toTreeString(int level, String prefix) {
@@ -31,7 +31,7 @@ public class ForInitEmptyNode extends ForInitNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public ForInitNode toGeneric() {
         return null;
     }
 }

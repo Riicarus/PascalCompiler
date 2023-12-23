@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.StatementNode;
 
 /**
  * Statement -> BracedCodeBlock
@@ -10,16 +10,16 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 9:30
  * @since 1.0.0
  */
-public class StatementToBracedCodeBlockNode extends StatementNode {
+public class DetailedStatementToBracedCodeBlockNode extends DetailedStatementNode {
 
-    public static final DetailedASTCreator<StatementToBracedCodeBlockNode> CREATOR =
-            children -> new StatementToBracedCodeBlockNode(
+    public static final DetailedASTCreator<DetailedStatementToBracedCodeBlockNode> CREATOR =
+            children -> new DetailedStatementToBracedCodeBlockNode(
                     (BracedCodeBlockNode) children.get(0)
             );
 
     private final BracedCodeBlockNode codeBlock;
 
-    public StatementToBracedCodeBlockNode(BracedCodeBlockNode codeBlock) {
+    public DetailedStatementToBracedCodeBlockNode(BracedCodeBlockNode codeBlock) {
         this.codeBlock = codeBlock;
     }
 
@@ -40,7 +40,10 @@ public class StatementToBracedCodeBlockNode extends StatementNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public StatementNode toGeneric() {
+        StatementNode statementNode = new StatementNode();
+        statementNode.setCurNode(codeBlock.toGeneric());
+
+        return statementNode;
     }
 }

@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.ProtoTypeNode;
 
 /**
  * FuncArgListDef -> FuncArgDef FuncArgListDefSuf
@@ -44,7 +44,13 @@ public class FuncArgListDefToFuncArgDefNode extends FuncArgListDefNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ProtoTypeNode toGeneric() {
+        ProtoTypeNode protoNode = funcArgListDefSuf.toGeneric();
+        if (protoNode == null) {
+            protoNode = new ProtoTypeNode();
+        }
+
+        protoNode.addArgNode(funcArgDef.toGeneric());
+        return protoNode;
     }
 }

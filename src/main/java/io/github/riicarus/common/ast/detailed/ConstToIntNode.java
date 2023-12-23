@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.ValueNode;
+import io.github.riicarus.common.data.ast.generic.type.IntTypeNode;
 
 /**
  * Const -> constInt
@@ -41,7 +42,7 @@ public class ConstToIntNode extends ConstNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ValueNode toGeneric() {
+        return new ValueNode(constInt.getToken().getLexeme(), IntTypeNode.getInstance());
     }
 }

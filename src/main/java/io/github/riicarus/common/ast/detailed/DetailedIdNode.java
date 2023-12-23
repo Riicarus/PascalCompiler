@@ -3,26 +3,26 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.VariableNode;
 
 /**
- * Continue -> continue
+ * Id -> identifier
  *
  * @author Riicarus
- * @create 2023-12-21 18:05
+ * @create 2023-12-21 9:38
  * @since 1.0.0
  */
-public class ContinueNode extends NonterminalASTNode {
+public class DetailedIdNode extends NonterminalASTNode {
 
-    public static final DetailedASTCreator<ContinueNode> CREATOR =
-            children -> new ContinueNode(
+    public static final DetailedASTCreator<DetailedIdNode> CREATOR =
+            children -> new DetailedIdNode(
                     (TerminalASTNode) children.get(0)
             );
 
-    private final TerminalASTNode _continue;
+    private final TerminalASTNode identifier;
 
-    public ContinueNode(TerminalASTNode _continue) {
-        this._continue = _continue;
+    public DetailedIdNode(TerminalASTNode identifier) {
+        this.identifier = identifier;
     }
 
     @Override
@@ -36,13 +36,13 @@ public class ContinueNode extends NonterminalASTNode {
         }
 
         sb.append(prefix).append(t).append(link).append(symbol)
-                .append(_continue.toTreeString(level + 1, prefix));
+                .append(identifier.toTreeString(level + 1, prefix));
 
         return sb.toString();
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public VariableNode toGeneric() {
+        return new VariableNode(identifier.getToken().getLexeme());
     }
 }

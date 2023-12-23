@@ -3,26 +3,26 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.BreakNode;
 
 /**
- * Id -> identifier
+ * Break -> break
  *
  * @author Riicarus
- * @create 2023-12-21 9:38
+ * @create 2023-12-21 18:04
  * @since 1.0.0
  */
-public class IdNode extends NonterminalASTNode {
+public class DetailedBreakNode extends NonterminalASTNode {
 
-    public static final DetailedASTCreator<IdNode> CREATOR =
-            children -> new IdNode(
+    public static final DetailedASTCreator<DetailedBreakNode> CREATOR =
+            children -> new DetailedBreakNode(
                     (TerminalASTNode) children.get(0)
             );
 
-    private final TerminalASTNode identifier;
+    private final TerminalASTNode _break;
 
-    public IdNode(TerminalASTNode identifier) {
-        this.identifier = identifier;
+    public DetailedBreakNode(TerminalASTNode _break) {
+        this._break = _break;
     }
 
     @Override
@@ -36,13 +36,13 @@ public class IdNode extends NonterminalASTNode {
         }
 
         sb.append(prefix).append(t).append(link).append(symbol)
-                .append(identifier.toTreeString(level + 1, prefix));
+                .append(_break.toTreeString(level + 1, prefix));
 
         return sb.toString();
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public BreakNode toGeneric() {
+        return new BreakNode();
     }
 }

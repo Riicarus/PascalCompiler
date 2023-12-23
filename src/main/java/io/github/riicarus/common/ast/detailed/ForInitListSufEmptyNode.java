@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForInitNode;
 
 /**
  * ForInitListSuf -> eps
@@ -31,7 +31,7 @@ public class ForInitListSufEmptyNode extends ForInitListSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public ForInitNode toGeneric() {
         return null;
     }
 }

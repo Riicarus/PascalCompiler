@@ -3,7 +3,7 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ReturnNode;
 
 /**
  * Return -> return RetValue
@@ -12,10 +12,10 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 18:06
  * @since 1.0.0
  */
-public class ReturnNode extends NonterminalASTNode {
+public class DetailedReturnNode extends NonterminalASTNode {
 
-    public static final DetailedASTCreator<ReturnNode> CREATOR =
-            children -> new ReturnNode(
+    public static final DetailedASTCreator<DetailedReturnNode> CREATOR =
+            children -> new DetailedReturnNode(
                     (TerminalASTNode) children.get(0),
                     (RetValueNode) children.get(1)
             );
@@ -23,7 +23,7 @@ public class ReturnNode extends NonterminalASTNode {
     private final TerminalASTNode _return;
     private final RetValueNode retValue;
 
-    public ReturnNode(TerminalASTNode _return, RetValueNode retValue) {
+    public DetailedReturnNode(TerminalASTNode _return, RetValueNode retValue) {
         this._return = _return;
         this.retValue = retValue;
     }
@@ -46,7 +46,11 @@ public class ReturnNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ReturnNode toGeneric() {
+        if (retValue instanceof RetValueEmptyNode) {
+            return new ReturnNode();
+        }
+
+        return new ReturnNode(retValue.toGeneric());
     }
 }

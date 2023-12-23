@@ -40,7 +40,7 @@ public class ControlToLoopNode extends ControlNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public GenericASTNode toGeneric() {
+        return loop.toGeneric();
     }
 }

@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForUpdateNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.AssignNode;
 
 /**
  * ForUpdateList -> Id AssignSuf ForUpdateListSuf
@@ -15,16 +16,16 @@ public class ForUpdateListNode extends NonterminalASTNode {
 
     public static final DetailedASTCreator<ForUpdateListNode> CREATOR =
             children -> new ForUpdateListNode(
-                    (IdNode) children.get(0),
+                    (DetailedIdNode) children.get(0),
                     (AssignSufNode) children.get(1),
                     (ForUpdateListSufNode) children.get(2)
             );
 
-    private final IdNode id;
+    private final DetailedIdNode id;
     private final AssignSufNode assignSuf;
     private final ForUpdateListSufNode forUpdateListSuf;
 
-    public ForUpdateListNode(IdNode id, AssignSufNode assignSuf, ForUpdateListSufNode forUpdateListSuf) {
+    public ForUpdateListNode(DetailedIdNode id, AssignSufNode assignSuf, ForUpdateListSufNode forUpdateListSuf) {
         this.id = id;
         this.assignSuf = assignSuf;
         this.forUpdateListSuf = forUpdateListSuf;
@@ -49,7 +50,16 @@ public class ForUpdateListNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ForUpdateNode toGeneric() {
+        AssignNode assignNode = assignSuf.toGeneric();
+        assignNode.setLeftOperand(id.toGeneric());
+
+        ForUpdateNode forUpdateNode = forUpdateListSuf.toGeneric();
+        if (forUpdateNode == null) {
+            forUpdateNode = new ForUpdateNode();
+        }
+
+        forUpdateNode.addUpdate(assignNode);
+        return forUpdateNode;
     }
 }

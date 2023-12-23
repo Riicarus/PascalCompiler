@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.AssignNode;
 
 /**
  * ForAssignOrDefine -> Id AssignSuf
@@ -14,14 +14,14 @@ public class ForAssignOrDefineToAssignNode extends ForAssignOrDefineNode {
 
     public static final DetailedASTCreator<ForAssignOrDefineToAssignNode> CREATOR =
             children -> new ForAssignOrDefineToAssignNode(
-                    (IdNode) children.get(0),
+                    (DetailedIdNode) children.get(0),
                     (AssignSufNode) children.get(1)
             );
 
-    private final IdNode id;
+    private final DetailedIdNode id;
     private final AssignSufNode assignSuf;
 
-    public ForAssignOrDefineToAssignNode(IdNode id, AssignSufNode assignSuf) {
+    public ForAssignOrDefineToAssignNode(DetailedIdNode id, AssignSufNode assignSuf) {
         this.id = id;
         this.assignSuf = assignSuf;
     }
@@ -44,7 +44,10 @@ public class ForAssignOrDefineToAssignNode extends ForAssignOrDefineNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public AssignNode toGeneric() {
+        AssignNode assignNode = assignSuf.toGeneric();
+        assignNode.setLeftOperand(id.toGeneric());
+
+        return assignNode;
     }
 }

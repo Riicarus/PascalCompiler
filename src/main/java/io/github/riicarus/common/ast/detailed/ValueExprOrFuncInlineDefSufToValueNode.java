@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
 
 /**
  * ValueExprOrFuncInlineDefSuf -> ValueExpr )
@@ -45,7 +45,7 @@ public class ValueExprOrFuncInlineDefSufToValueNode extends ValueExprOrFuncInlin
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ExprNode toGeneric() {
+        return valueExpr.toGeneric();
     }
 }

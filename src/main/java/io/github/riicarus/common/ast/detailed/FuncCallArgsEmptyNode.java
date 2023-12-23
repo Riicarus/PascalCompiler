@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.func.FunctionCallNode;
 
 /**
  * FuncCallArgs -> eps
@@ -31,7 +31,7 @@ public class FuncCallArgsEmptyNode extends FuncCallArgsNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public FunctionCallNode toGeneric() {
         return null;
     }
 }

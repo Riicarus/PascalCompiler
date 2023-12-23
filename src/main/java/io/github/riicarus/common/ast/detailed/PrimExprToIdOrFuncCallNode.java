@@ -1,7 +1,9 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
+import io.github.riicarus.common.data.ast.generic.expr.func.FunctionCallNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.VariableNode;
 
 /**
  * PrimExpr -> Id FuncCallSuf
@@ -14,14 +16,14 @@ public class PrimExprToIdOrFuncCallNode extends PrimExprNode {
 
     public static final DetailedASTCreator<PrimExprToIdOrFuncCallNode> CREATOR =
             children -> new PrimExprToIdOrFuncCallNode(
-                    (IdNode) children.get(0),
+                    (DetailedIdNode) children.get(0),
                     (FuncCallSufNode) children.get(1)
             );
 
-    private final IdNode id;
+    private final DetailedIdNode id;
     private final FuncCallSufNode funcCallSuf;
 
-    public PrimExprToIdOrFuncCallNode(IdNode id, FuncCallSufNode funcCallSuf) {
+    public PrimExprToIdOrFuncCallNode(DetailedIdNode id, FuncCallSufNode funcCallSuf) {
         this.id = id;
         this.funcCallSuf = funcCallSuf;
     }
@@ -44,7 +46,14 @@ public class PrimExprToIdOrFuncCallNode extends PrimExprNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ExprNode toGeneric() {
+        VariableNode varNode = id.toGeneric();
+        FunctionCallNode funcCallNode = funcCallSuf.toGeneric();
+        if (funcCallNode == null) {
+            return varNode;
+        }
+
+        funcCallNode.setFuncId(varNode);
+        return funcCallNode;
     }
 }

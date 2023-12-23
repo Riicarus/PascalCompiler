@@ -1,19 +1,19 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForUpdateNode;
 
 /**
- * ForCondition -> eps
+ * ForUpdate -> eps
  *
  * @author Riicarus
- * @create 2023-12-21 19:06
+ * @create 2023-12-21 19:09
  * @since 1.0.0
  */
-public class ForConditionEmptyNode extends ForConditionNode {
+public class DetailedForUpdateEmptyNode extends DetailedForUpdateNode {
 
-    public static final DetailedASTCreator<ForConditionEmptyNode> CREATOR =
-            children -> new ForConditionEmptyNode();
+    public static final DetailedASTCreator<DetailedForUpdateEmptyNode> CREATOR =
+            children -> new DetailedForUpdateEmptyNode();
 
     @Override
     public String toTreeString(int level, String prefix) {
@@ -31,7 +31,7 @@ public class ForConditionEmptyNode extends ForConditionNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public ForUpdateNode toGeneric() {
         return null;
     }
 }

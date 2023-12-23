@@ -46,11 +46,14 @@ public class SyntaxTest {
                       break;
                       continue;
                       return k;
+                      return;
                       return 1;
                   }
                   read(m);
                   k:=F(m);
                   write(k);
+                  
+                  int j := i * k - n * j / p;
                 }
                 """;
 

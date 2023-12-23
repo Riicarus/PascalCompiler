@@ -3,7 +3,7 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ElseIfNode;
 
 /**
  * ElseIf -> elseif (ValueExpr) BracedCodeBlock
@@ -12,10 +12,10 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 18:32
  * @since 1.0.0
  */
-public class ElseIfNode extends NonterminalASTNode {
+public class DetailedElseIfNode extends NonterminalASTNode {
 
-    public static final DetailedASTCreator<ElseIfNode> CREATOR =
-            children -> new ElseIfNode(
+    public static final DetailedASTCreator<DetailedElseIfNode> CREATOR =
+            children -> new DetailedElseIfNode(
                     (TerminalASTNode) children.get(0),
                     (TerminalASTNode) children.get(1),
                     (ValueExprNode) children.get(2),
@@ -29,9 +29,9 @@ public class ElseIfNode extends NonterminalASTNode {
     private final TerminalASTNode rParen;
     private final BracedCodeBlockNode codeBlock;
 
-    public ElseIfNode(TerminalASTNode elseif,
-                      TerminalASTNode lParen, ValueExprNode valueExpr, TerminalASTNode rParen,
-                      BracedCodeBlockNode codeBlock) {
+    public DetailedElseIfNode(TerminalASTNode elseif,
+                              TerminalASTNode lParen, ValueExprNode valueExpr, TerminalASTNode rParen,
+                              BracedCodeBlockNode codeBlock) {
         this.elseif = elseif;
         this.lParen = lParen;
         this.valueExpr = valueExpr;
@@ -60,7 +60,11 @@ public class ElseIfNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ElseIfNode toGeneric() {
+        ElseIfNode elseIfNode = new ElseIfNode();
+        elseIfNode.setConditionNode(valueExpr.toGeneric());
+        elseIfNode.setCodeBlockNode(codeBlock.toGeneric());
+
+        return elseIfNode;
     }
 }

@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ContinueNode;
 
 /**
  * Control -> Continue;
@@ -15,14 +15,14 @@ public class ControlToContinueNode extends ControlNode {
 
     public static final DetailedASTCreator<ControlToContinueNode> CREATOR =
             children -> new ControlToContinueNode(
-                    (ContinueNode) children.get(0),
+                    (DetailedContinueNode) children.get(0),
                     (TerminalASTNode) children.get(1)
             );
 
-    private final ContinueNode _continue;
+    private final DetailedContinueNode _continue;
     private final TerminalASTNode semicolon;
 
-    public ControlToContinueNode(ContinueNode _continue, TerminalASTNode semicolon) {
+    public ControlToContinueNode(DetailedContinueNode _continue, TerminalASTNode semicolon) {
         this._continue = _continue;
         this.semicolon = semicolon;
     }
@@ -45,7 +45,7 @@ public class ControlToContinueNode extends ControlNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ContinueNode toGeneric() {
+        return _continue.toGeneric();
     }
 }

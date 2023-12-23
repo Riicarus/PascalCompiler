@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.CodeBlockNode;
 
 /**
  * EndElse -> else BracedCodeBlock
@@ -45,7 +45,7 @@ public class EndElseToElseNode extends EndElseNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public CodeBlockNode toGeneric() {
+        return codeBlock.toGeneric();
     }
 }

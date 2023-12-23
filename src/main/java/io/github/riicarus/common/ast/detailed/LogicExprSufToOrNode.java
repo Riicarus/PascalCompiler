@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.abstruct.BinaryOpNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.OrNode;
 
 /**
  * LogicExprSuf -> | LogicItem LogicExprSuf
@@ -49,7 +50,16 @@ public class LogicExprSufToOrNode extends LogicExprSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public BinaryOpNode toGeneric() {
+        OrNode orNode = new OrNode();
+        orNode.setRightOperand(logicItem.toGeneric());
+
+        BinaryOpNode upperOpNode = logicExprSuf.toGeneric();
+        if (upperOpNode != null) {
+            upperOpNode.setLeftOperand(orNode);
+            orNode.setTopOpNode(upperOpNode.getTopOpNode());
+        }
+
+        return orNode;
     }
 }

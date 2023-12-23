@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.BreakNode;
 
 /**
  * Control -> Break;
@@ -15,14 +15,14 @@ public class ControlToBreakNode extends ControlNode {
 
     public static final DetailedASTCreator<ControlToBreakNode> CREATOR =
             children -> new ControlToBreakNode(
-                    (BreakNode) children.get(0),
+                    (DetailedBreakNode) children.get(0),
                     (TerminalASTNode) children.get(1)
             );
 
-    private final BreakNode _break;
+    private final DetailedBreakNode _break;
     private final TerminalASTNode semicolon;
 
-    public ControlToBreakNode(BreakNode _break, TerminalASTNode semicolon) {
+    public ControlToBreakNode(DetailedBreakNode _break, TerminalASTNode semicolon) {
         this._break = _break;
         this.semicolon = semicolon;
     }
@@ -45,7 +45,7 @@ public class ControlToBreakNode extends ControlNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public BreakNode toGeneric() {
+        return _break.toGeneric();
     }
 }

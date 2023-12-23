@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.abstruct.BinaryOpNode;
 
 /**
  * RelExprSuf -> RelOp ArithExpr RelExprSuf
@@ -48,7 +48,16 @@ public class RelExprSufToRelOpNode extends RelExprSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public BinaryOpNode toGeneric() {
+        BinaryOpNode relOpNode = relOp.toGeneric();
+        relOpNode.setRightOperand(arithExpr.toGeneric());
+
+        BinaryOpNode upperRelOpNode = relExprSuf.toGeneric();
+        if (upperRelOpNode != null) {
+            upperRelOpNode.setLeftOperand(relOpNode);
+            relOpNode.setTopOpNode(upperRelOpNode.getTopOpNode());
+        }
+
+        return relOpNode;
     }
 }

@@ -1,6 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
+import io.github.riicarus.common.data.ast.generic.type.ProtoTypeNode;
 
 /**
  * FuncArgListDefSuf -> , FuncArgDef FuncArgListDefSuf | eps
@@ -10,4 +11,6 @@ import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
  * @since 1.0.0
  */
 public abstract class FuncArgListDefSufNode extends NonterminalASTNode {
+    @Override
+    public abstract ProtoTypeNode toGeneric();
 }

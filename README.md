@@ -129,7 +129,6 @@ $$
 & Type \to BaseType \; TypeSuf \\
 & Type \to VoidFuncType \; TypeSuf \\
 & TypeSuf \to function (FuncArgTypeDef) \; TypeSuf \\
-& TypeSuf \to [ArraySize] \; TypeSuf \\
 & TypeSuf \to \epsilon \\
 \\
 
@@ -149,12 +148,6 @@ $$
 & FuncArgTypeDef \to \epsilon \\
 & FuncArgTypeDefSuf \to , \; Type \; FuncArgTypeDefSuf \\
 & FuncArgTypeDefSuf \to \epsilon \\
-\\
-
-& 数组长度 \\
-& ArraySize \to Id \\
-& ArraySize \to constInt \\
-& ArraySize \to \epsilon \\
 \end{aligned}
 $$
 

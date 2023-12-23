@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ElseNode;
 
 /**
  * Else -> ElseIfList EndElse
@@ -11,10 +11,10 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 18:21
  * @since 1.0.0
  */
-public class ElseNode extends NonterminalASTNode {
+public class DetailedElseNode extends NonterminalASTNode {
 
-    public static final DetailedASTCreator<ElseNode> CREATOR =
-            children -> new ElseNode(
+    public static final DetailedASTCreator<DetailedElseNode> CREATOR =
+            children -> new DetailedElseNode(
                     (ElseIfListNode) children.get(0),
                     (EndElseNode) children.get(1)
             );
@@ -22,7 +22,7 @@ public class ElseNode extends NonterminalASTNode {
     private final ElseIfListNode elseIfList;
     private final EndElseNode endElse;
 
-    public ElseNode(ElseIfListNode elseIfList, EndElseNode endElse) {
+    public DetailedElseNode(ElseIfListNode elseIfList, EndElseNode endElse) {
         this.elseIfList = elseIfList;
         this.endElse = endElse;
     }
@@ -45,7 +45,13 @@ public class ElseNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ElseNode toGeneric() {
+        ElseNode elseNode = elseIfList.toGeneric();
+        if (elseNode == null) {
+            elseNode = new ElseNode();
+        }
+
+        elseNode.setCodeBlockNode(endElse.toGeneric());
+        return elseNode;
     }
 }

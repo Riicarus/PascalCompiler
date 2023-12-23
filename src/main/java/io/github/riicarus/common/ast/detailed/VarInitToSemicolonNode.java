@@ -2,7 +2,7 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.AssignNode;
 
 /**
  * VarInit -> ;
@@ -41,7 +41,7 @@ public class VarInitToSemicolonNode extends VarInitNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public AssignNode toGeneric() {
         return null;
     }
 }

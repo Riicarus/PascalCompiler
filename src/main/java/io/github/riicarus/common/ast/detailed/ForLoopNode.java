@@ -3,7 +3,11 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.CodeBlockNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForConditionNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForInitNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForNode;
+import io.github.riicarus.common.data.ast.generic.expr.ctrl.ForUpdateNode;
 
 /**
  * ForLoop -> for (ForInit; ForCondition; ForUpdate) ForBody
@@ -18,29 +22,29 @@ public class ForLoopNode extends NonterminalASTNode {
             children -> new ForLoopNode(
                     (TerminalASTNode) children.get(0),
                     (TerminalASTNode) children.get(1),
-                    (ForInitNode) children.get(2),
+                    (DetailedForInitNode) children.get(2),
                     (TerminalASTNode) children.get(3),
-                    (ForConditionNode) children.get(4),
+                    (DetailedForConditionNode) children.get(4),
                     (TerminalASTNode) children.get(5),
-                    (ForUpdateNode) children.get(6),
+                    (DetailedForUpdateNode) children.get(6),
                     (TerminalASTNode) children.get(7),
                     (ForBodyNode) children.get(8)
             );
 
     private final TerminalASTNode _for;
     private final TerminalASTNode lParen;
-    private final ForInitNode forInit;
+    private final DetailedForInitNode forInit;
     private final TerminalASTNode semicolon1;
-    private final ForConditionNode forCondition;
+    private final DetailedForConditionNode forCondition;
     private final TerminalASTNode semicolon2;
-    private final ForUpdateNode forUpdate;
+    private final DetailedForUpdateNode forUpdate;
     private final TerminalASTNode rParen;
     private final ForBodyNode forBody;
 
     public ForLoopNode(TerminalASTNode _for,
-                       TerminalASTNode lParen, ForInitNode forInit, TerminalASTNode semicolon1,
-                       ForConditionNode forCondition, TerminalASTNode semicolon2,
-                       ForUpdateNode forUpdate, TerminalASTNode rParen,
+                       TerminalASTNode lParen, DetailedForInitNode forInit, TerminalASTNode semicolon1,
+                       DetailedForConditionNode forCondition, TerminalASTNode semicolon2,
+                       DetailedForUpdateNode forUpdate, TerminalASTNode rParen,
                        ForBodyNode forBody) {
         this._for = _for;
         this.lParen = lParen;
@@ -78,7 +82,12 @@ public class ForLoopNode extends NonterminalASTNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ForNode toGeneric() {
+        ForInitNode forInitNode = forInit.toGeneric();
+        ForConditionNode forConditionNode = forCondition.toGeneric();
+        ForUpdateNode forUpdateNode = forUpdate.toGeneric();
+        CodeBlockNode codeBlockNode = forBody.toGeneric();
+
+        return new ForNode(forInitNode, forConditionNode, forUpdateNode, codeBlockNode);
     }
 }

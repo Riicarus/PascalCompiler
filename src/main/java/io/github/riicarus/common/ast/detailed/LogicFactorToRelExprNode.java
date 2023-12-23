@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
 
 /**
  * LogicFactor -> RelExpr
@@ -40,7 +40,7 @@ public class LogicFactorToRelExprNode extends LogicFactorNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ExprNode toGeneric() {
+        return relExpr.toGeneric();
     }
 }

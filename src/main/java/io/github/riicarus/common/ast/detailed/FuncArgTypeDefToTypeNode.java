@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.type.FuncTypeNode;
 
 /**
  * FuncArgTypeDef -> Type FuncArgTypeDefSuf
@@ -10,18 +10,18 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 10:43
  * @since 1.0.0
  */
-public class FuncArgTypeDefToTypeNode extends FuncArgTypeDefNode{
+public class FuncArgTypeDefToTypeNode extends FuncArgTypeDefNode {
 
     public static final DetailedASTCreator<FuncArgTypeDefToTypeNode> CREATOR =
             children -> new FuncArgTypeDefToTypeNode(
-                    (TypeNode) children.get(0),
+                    (DetailedTypeNode) children.get(0),
                     (FuncArgTypeDefSufNode) children.get(1)
             );
 
-    private final TypeNode type;
+    private final DetailedTypeNode type;
     private final FuncArgTypeDefSufNode funcArgTypeDefSuf;
 
-    public FuncArgTypeDefToTypeNode(TypeNode type, FuncArgTypeDefSufNode funcArgTypeDefSuf) {
+    public FuncArgTypeDefToTypeNode(DetailedTypeNode type, FuncArgTypeDefSufNode funcArgTypeDefSuf) {
         this.type = type;
         this.funcArgTypeDefSuf = funcArgTypeDefSuf;
     }
@@ -44,7 +44,13 @@ public class FuncArgTypeDefToTypeNode extends FuncArgTypeDefNode{
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public FuncTypeNode toGeneric() {
+        FuncTypeNode funcTypeNode = funcArgTypeDefSuf.toGeneric();
+        if (funcTypeNode == null) {
+            funcTypeNode = new FuncTypeNode();
+        }
+
+        funcTypeNode.addArgType(type.toGeneric());
+        return funcTypeNode;
     }
 }

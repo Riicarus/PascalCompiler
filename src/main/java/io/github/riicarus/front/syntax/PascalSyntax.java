@@ -86,7 +86,6 @@ public class PascalSyntax {
     private static final SyntaxSymbol VoidFuncType = new LL1SyntaxSymbol("VoidFuncType");
     private static final SyntaxSymbol FuncArgTypeDef = new LL1SyntaxSymbol("FuncArgTypeDef");
     private static final SyntaxSymbol FuncArgTypeDefSuf = new LL1SyntaxSymbol("FuncArgTypeDefSuf");
-    private static final SyntaxSymbol ArraySize = new LL1SyntaxSymbol("ArraySize");
 
     private static final SyntaxSymbol ValueExpr = new LL1SyntaxSymbol("ValueExpr");
     private static final SyntaxSymbol LogicExprSuf = new LL1SyntaxSymbol("LogicExprSuf");
@@ -147,10 +146,10 @@ public class PascalSyntax {
 
         definer.addProduction(NonNullCodeBlock, List.of(Statement), NonNullCodeBlockNode.CREATOR);
 
-        definer.addProduction(Statement, List.of(Define), StatementToDefineNode.CREATOR);
-        definer.addProduction(Statement, List.of(AssignOrFuncCall), StatementToAssignOrFuncCallNode.CREATOR);
-        definer.addProduction(Statement, List.of(Control), StatementToControlNode.CREATOR);
-        definer.addProduction(Statement, List.of(BracedCodeBlock), StatementToBracedCodeBlockNode.CREATOR);
+        definer.addProduction(Statement, List.of(Define), DetailedStatementToDefineNode.CREATOR);
+        definer.addProduction(Statement, List.of(AssignOrFuncCall), DetailedStatementToAssignOrFuncCallNode.CREATOR);
+        definer.addProduction(Statement, List.of(Control), DetailedStatementToControlNode.CREATOR);
+        definer.addProduction(Statement, List.of(BracedCodeBlock), DetailedStatementToBracedCodeBlockNode.CREATOR);
 
         definer.addProduction(AssignOrFuncCall, List.of(Id, AssignOrFuncCallSuf, semicolon), AssignOrFuncCallNode.CREATOR);
         definer.addProduction(AssignOrFuncCallSuf, List.of(AssignSuf), AssignOrFuncCallSufToAssignSufNode.CREATOR);
@@ -166,7 +165,7 @@ public class PascalSyntax {
         definer.addProduction(VarDef, List.of(Id, VarInit), VarDefToCommonVarNode.CREATOR);
         definer.addProduction(VarDef, List.of(func, Id, lParen, FuncArgListDef, rParen, BracedCodeBlock), VarDefToFuncVarNode.CREATOR);
 
-        definer.addProduction(Id, List.of(identifier), IdNode.CREATOR);
+        definer.addProduction(Id, List.of(identifier), DetailedIdNode.CREATOR);
 
         definer.addProduction(VarInit, List.of(AssignSuf, semicolon), VarInitToAssignSufNode.CREATOR);
         definer.addProduction(VarInit, List.of(semicolon), VarInitToSemicolonNode.CREATOR);
@@ -177,10 +176,9 @@ public class PascalSyntax {
         definer.addProduction(FuncArgListDefSuf, List.of(eps), FuncArgListDefSufEmptyNode.CREATOR);
         definer.addProduction(FuncArgDef, List.of(Type, Id), FuncArgDefNode.CREATOR);
 
-        definer.addProduction(Type, List.of(BaseType, TypeSuf), TypeToBaseTypeNode.CREATOR);
-        definer.addProduction(Type, List.of(VoidFuncType, TypeSuf), TypeToVoidFuncTypeNode.CREATOR);
+        definer.addProduction(Type, List.of(BaseType, TypeSuf), DetailedTypeToBaseTypeNode.CREATOR);
+        definer.addProduction(Type, List.of(VoidFuncType, TypeSuf), DetailedTypeToVoidFuncTypeNode.CREATOR);
         definer.addProduction(TypeSuf, List.of(function, lParen, FuncArgTypeDef, rParen, TypeSuf), TypeSufToFuncNode.CREATOR);
-        definer.addProduction(TypeSuf, List.of(lBracket, ArraySize, rBracket, TypeSuf), TypeSufToArrayNode.CREATOR);
         definer.addProduction(TypeSuf, List.of(eps), TypeSufEmptyNode.CREATOR);
 
         definer.addProduction(BaseType, List.of(_int), BaseTypeToIntNode.CREATOR);
@@ -194,11 +192,6 @@ public class PascalSyntax {
         definer.addProduction(FuncArgTypeDef, List.of(eps), FuncArgTypeDefEmptyNode.CREATOR);
         definer.addProduction(FuncArgTypeDefSuf, List.of(colon, Type, FuncArgTypeDefSuf), FuncArgTypeDefSufToTypeNode.CREATOR);
         definer.addProduction(FuncArgTypeDefSuf, List.of(eps), FuncArgTypeDefSufEmptyNode.CREATOR);
-
-        definer.addProduction(ArraySize, List.of(Id), ArraySizeToIdNode.CREATOR);
-        definer.addProduction(ArraySize, List.of(constInt), ArraySizeToConstIntNode.CREATOR);
-        definer.addProduction(ArraySize, List.of(eps), ArraySizeEmptyNode.CREATOR);
-
 
         // 值语句
         definer.addProduction(ValueExpr, List.of(LogicItem, LogicExprSuf), ValueExprNode.CREATOR);
@@ -260,24 +253,24 @@ public class PascalSyntax {
         definer.addProduction(Control, List.of(If), ControlToIfNode.CREATOR);
         definer.addProduction(Control, List.of(Loop), ControlToLoopNode.CREATOR);
 
-        definer.addProduction(Break, List.of(_break), BreakNode.CREATOR);
+        definer.addProduction(Break, List.of(_break), DetailedBreakNode.CREATOR);
 
-        definer.addProduction(Continue, List.of(_continue), ContinueNode.CREATOR);
+        definer.addProduction(Continue, List.of(_continue), DetailedContinueNode.CREATOR);
 
-        definer.addProduction(Return, List.of(_return, RetValue), ReturnNode.CREATOR);
+        definer.addProduction(Return, List.of(_return, RetValue), DetailedReturnNode.CREATOR);
 
         definer.addProduction(RetValue, List.of(ValueExpr), RetValueToValueExprNode.CREATOR);
         definer.addProduction(RetValue, List.of(eps), RetValueEmptyNode.CREATOR);
 
         // if 语句
-        definer.addProduction(If, List.of(_if, lParen, ValueExpr, rParen, BracedCodeBlock, Else), IfNode.CREATOR);
+        definer.addProduction(If, List.of(_if, lParen, ValueExpr, rParen, BracedCodeBlock, Else), DetailedIfNode.CREATOR);
 
-        definer.addProduction(Else, List.of(ElseIfList, EndElse), ElseNode.CREATOR);
+        definer.addProduction(Else, List.of(ElseIfList, EndElse), DetailedElseNode.CREATOR);
 
         definer.addProduction(ElseIfList, List.of(ElseIf, ElseIfList), ElseIfListToElseIfNode.CREATOR);
         definer.addProduction(ElseIfList, List.of(eps), ElseIfListEmptyNode.CREATOR);
 
-        definer.addProduction(ElseIf, List.of(elseif, lParen, ValueExpr, rParen, BracedCodeBlock), ElseIfNode.CREATOR);
+        definer.addProduction(ElseIf, List.of(elseif, lParen, ValueExpr, rParen, BracedCodeBlock), DetailedElseIfNode.CREATOR);
 
         definer.addProduction(EndElse, List.of(_else, BracedCodeBlock), EndElseToElseNode.CREATOR);
         definer.addProduction(EndElse, List.of(eps), EndElseEmptyNode.CREATOR);
@@ -289,8 +282,8 @@ public class PascalSyntax {
         // For 循环
         definer.addProduction(ForLoop, List.of(_for, lParen, ForInit, semicolon, ForCondition, semicolon, ForUpdate, rParen, ForBody), ForLoopNode.CREATOR);
 
-        definer.addProduction(ForInit, List.of(ForInitList), ForInitToInitListNode.CREATOR);
-        definer.addProduction(ForInit, List.of(eps), ForInitEmptyNode.CREATOR);
+        definer.addProduction(ForInit, List.of(ForInitList), DetailedForInitToInitListNode.CREATOR);
+        definer.addProduction(ForInit, List.of(eps), DetailedForInitEmptyNode.CREATOR);
 
         definer.addProduction(ForInitList, List.of(ForAssignOrDefine, ForInitListSuf), ForInitListNode.CREATOR);
         definer.addProduction(ForInitListSuf, List.of(colon, ForAssignOrDefine, ForInitListSuf), ForInitListSufToForAssignOrDefineNode.CREATOR);
@@ -298,11 +291,11 @@ public class PascalSyntax {
         definer.addProduction(ForAssignOrDefine, List.of(Type, Id, AssignSuf), ForAssignOrDefineToDefineNode.CREATOR);
         definer.addProduction(ForAssignOrDefine, List.of(Id, AssignSuf), ForAssignOrDefineToAssignNode.CREATOR);
 
-        definer.addProduction(ForCondition, List.of(ValueExpr), ForConditionToValueExprNode.CREATOR);
-        definer.addProduction(ForCondition, List.of(eps), ForConditionEmptyNode.CREATOR);
+        definer.addProduction(ForCondition, List.of(ValueExpr), DetailedForConditionToValueExprNode.CREATOR);
+        definer.addProduction(ForCondition, List.of(eps), DetailedForConditionEmptyNode.CREATOR);
 
-        definer.addProduction(ForUpdate, List.of(ForUpdateList), ForUpdateToUpdateListNode.CREATOR);
-        definer.addProduction(ForUpdate, List.of(eps), ForUpdateEmptyNode.CREATOR);
+        definer.addProduction(ForUpdate, List.of(ForUpdateList), DetailedForUpdateToUpdateListNode.CREATOR);
+        definer.addProduction(ForUpdate, List.of(eps), DetailedForUpdateEmptyNode.CREATOR);
         definer.addProduction(ForUpdateList, List.of(Id, AssignSuf, ForUpdateListSuf), ForUpdateListNode.CREATOR);
         definer.addProduction(ForUpdateListSuf, List.of(colon, Id, AssignSuf, ForUpdateListSuf), ForUpdateListSufToAssignNode.CREATOR);
         definer.addProduction(ForUpdateListSuf, List.of(eps), ForUpdateListSufEmptyNode.CREATOR);

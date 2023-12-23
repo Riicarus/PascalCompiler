@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.StatementNode;
 
 /**
  * Statement -> AssignOrFuncCall
@@ -10,16 +10,16 @@ import io.github.riicarus.common.data.ast.generic.GenericASTNode;
  * @create 2023-12-21 9:29
  * @since 1.0.0
  */
-public class StatementToAssignOrFuncCallNode extends StatementNode {
+public class DetailedStatementToAssignOrFuncCallNode extends DetailedStatementNode {
 
-    public static final DetailedASTCreator<StatementToAssignOrFuncCallNode> CREATOR =
-            children -> new StatementToAssignOrFuncCallNode(
+    public static final DetailedASTCreator<DetailedStatementToAssignOrFuncCallNode> CREATOR =
+            children -> new DetailedStatementToAssignOrFuncCallNode(
                     (AssignOrFuncCallNode) children.get(0)
             );
 
     private final AssignOrFuncCallNode assignOrFuncCall;
 
-    public StatementToAssignOrFuncCallNode(AssignOrFuncCallNode assignOrFuncCall) {
+    public DetailedStatementToAssignOrFuncCallNode(AssignOrFuncCallNode assignOrFuncCall) {
         this.assignOrFuncCall = assignOrFuncCall;
     }
 
@@ -40,7 +40,9 @@ public class StatementToAssignOrFuncCallNode extends StatementNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public StatementNode toGeneric() {
+        StatementNode statementNode = new StatementNode();
+        statementNode.setCurNode(assignOrFuncCall.toGeneric());
+        return statementNode;
     }
 }

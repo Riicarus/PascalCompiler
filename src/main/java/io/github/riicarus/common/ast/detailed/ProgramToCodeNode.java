@@ -40,7 +40,7 @@ public class ProgramToCodeNode extends ProgramNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public GenericASTNode toGeneric() {
+        return codeBlock.toGeneric();
     }
 }

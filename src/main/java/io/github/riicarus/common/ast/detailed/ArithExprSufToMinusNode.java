@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.abstruct.BinaryOpNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.compute.MinusNode;
 
 /**
  * ArithExprSuf -> - ArithItem ArithExprSuf
@@ -49,7 +50,16 @@ public class ArithExprSufToMinusNode extends ArithExprSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public MinusNode toGeneric() {
+        MinusNode minusNode = new MinusNode();
+        minusNode.setRightOperand(arithItem.toGeneric());
+
+        BinaryOpNode upperOpNode = arithExprSuf.toGeneric();
+        if (upperOpNode != null) {
+            upperOpNode.setLeftOperand(minusNode);
+            minusNode.setTopOpNode(upperOpNode.getTopOpNode());
+        }
+
+        return minusNode;
     }
 }

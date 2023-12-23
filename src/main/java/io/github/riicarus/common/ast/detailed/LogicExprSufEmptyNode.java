@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.abstruct.BinaryOpNode;
 
 /**
  * LogicExprSuf -> eps
@@ -31,7 +31,7 @@ public class LogicExprSufEmptyNode extends LogicExprSufNode {
     }
 
     @Override
-    public GenericASTNode simplify() {
+    public BinaryOpNode toGeneric() {
         return null;
     }
 }

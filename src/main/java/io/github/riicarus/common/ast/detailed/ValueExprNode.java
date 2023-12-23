@@ -2,7 +2,8 @@ package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
+import io.github.riicarus.common.data.ast.generic.expr.op.abstruct.BinaryOpNode;
 
 /**
  * ValueExpr -> LogicItem LogicExprSuf
@@ -44,8 +45,21 @@ public class ValueExprNode extends NonterminalASTNode {
         return sb.toString();
     }
 
+    /**
+     * 注意: 如果是逻辑表达式而不是单个值, 此处返回的是对应逻辑表达式的顶层(根) Op 节点.
+     *
+     * @return 逻辑表达式的顶层节点 Or 单个值.
+     */
     @Override
-    public GenericASTNode simplify() {
-        return null;
+    public ExprNode toGeneric() {
+        ExprNode itemNode = logicItem.toGeneric();
+
+        BinaryOpNode opNode = logicExprSuf.toGeneric();
+        if (opNode == null) {
+            return itemNode;
+        }
+
+        opNode.setLeftOperand(itemNode);
+        return opNode.getTopOpNode();
     }
 }
