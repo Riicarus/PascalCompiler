@@ -305,4 +305,6 @@ public class PascalSyntax {
         SYNTAXER = new LL1Syntaxer(definer);
     }
 
+    public static void avoidLazyLoad() {}
+
 }

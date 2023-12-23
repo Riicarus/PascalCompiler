@@ -15,6 +15,14 @@ public class SyntaxTest {
 
     static PascalLexer lexer = new PascalLexer();
 
+    static {
+        long time = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("Syntax loading...");
+        PascalSyntax.avoidLazyLoad();
+        System.out.println("Syntax loaded, time used: " + (System.currentTimeMillis() - time) + " ms.");
+    }
+
     @Test
     public void testLL1SyntaxInlineDefinerParse() {
         String s = """
@@ -58,7 +66,8 @@ public class SyntaxTest {
                 """;
 
         final List<Token> tokenList = lexer.parse(s.toCharArray());
-        System.out.println(tokenList);
+
+        long time = System.currentTimeMillis();
         final SyntaxParseResult result = PascalSyntax.SYNTAXER.parse(tokenList, lexer.getAssistantLexSymbolSet());
 
         System.out.println();

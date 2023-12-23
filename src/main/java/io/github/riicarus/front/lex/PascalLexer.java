@@ -42,6 +42,10 @@ public class PascalLexer implements Lexer {
      */
     @Override
     public List<Token> parse(char[] input) {
+        long time = System.currentTimeMillis();
+        System.out.println();
+        System.out.println("Lexer parsing...");
+
         List<Token> tokenList = new LinkedList<>();
 
         buffer = input;
@@ -65,6 +69,7 @@ public class PascalLexer implements Lexer {
         tokenList.add(new Token(PascalLexicalSymbol.EOF, "EOF", line));
         tokenList.add(new Token(PascalLexicalSymbol.LEX_END, String.valueOf(CharUtil.LEX_SYNTAX_END),line));
 
+        System.out.println("Lexer parse succeeded, time used: " + (System.currentTimeMillis() - time) + " ms.");
         return tokenList;
     }
 
