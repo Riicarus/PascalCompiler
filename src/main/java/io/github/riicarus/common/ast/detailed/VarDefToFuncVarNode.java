@@ -3,7 +3,7 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
 import io.github.riicarus.common.data.ast.generic.expr.func.FunctionNode;
-import io.github.riicarus.common.data.ast.generic.type.ProtoTypeNode;
+import io.github.riicarus.common.data.ast.generic.ProtoTypeNode;
 
 /**
  * VarDef -> func Id(FuncArgListDef) BracedCodeBlock
@@ -67,8 +67,7 @@ public class VarDefToFuncVarNode extends VarDefNode {
     public FunctionNode toGeneric() {
         ProtoTypeNode protoNode = funcArgListDef.toGeneric();
         protoNode.setBody(bracedCodeBlock.toGeneric());
-        FunctionNode functionNode = new FunctionNode();
-        functionNode.setVarNode(id.toGeneric());
+        FunctionNode functionNode = new FunctionNode(id.toGeneric());
         functionNode.setProtoTypeNode(protoNode);
 
         return functionNode;

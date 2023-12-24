@@ -3,7 +3,6 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
 import io.github.riicarus.common.data.ast.generic.expr.v.ValueNode;
-import io.github.riicarus.common.data.ast.generic.type.NullTypeNode;
 
 /**
  * Const -> null
@@ -43,6 +42,6 @@ public class ConstToNullNode extends ConstNode {
 
     @Override
     public ValueNode toGeneric() {
-        return new ValueNode("null", NullTypeNode.getInstance());
+        return new ValueNode("null");
     }
 }

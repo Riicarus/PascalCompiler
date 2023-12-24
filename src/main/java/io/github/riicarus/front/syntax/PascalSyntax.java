@@ -100,12 +100,11 @@ public class PascalSyntax {
     private static final SyntaxSymbol ArithItem = new LL1SyntaxSymbol("ArithItem");
     private static final SyntaxSymbol ArithItemSuf = new LL1SyntaxSymbol("ArithItemSuf");
     private static final SyntaxSymbol PrimExpr = new LL1SyntaxSymbol("PrimExpr");
-    private static final SyntaxSymbol ValueExprOrFuncInlineDefSuf = new LL1SyntaxSymbol("ValueExprOrFuncInlineDefSuf");
     private static final SyntaxSymbol Const = new LL1SyntaxSymbol("Const");
     private static final SyntaxSymbol FuncCallSuf = new LL1SyntaxSymbol("FuncCallSuf");
     private static final SyntaxSymbol FuncCallArgs = new LL1SyntaxSymbol("FuncCallArgs");
     private static final SyntaxSymbol FuncCallArgsSuf = new LL1SyntaxSymbol("FuncCallArgsSuf");
-    private static final SyntaxSymbol FuncInlineDefSuf = new LL1SyntaxSymbol("FuncInlineDefSuf");
+    private static final SyntaxSymbol FuncInlineDefine = new LL1SyntaxSymbol("FuncInlineDefine");
 
     private static final SyntaxSymbol Control = new LL1SyntaxSymbol("Control");
     private static final SyntaxSymbol Break = new LL1SyntaxSymbol("Break");
@@ -223,12 +222,10 @@ public class PascalSyntax {
         definer.addProduction(ArithItemSuf, List.of(divides, PrimExpr, ArithItemSuf), ArithItemSufToDivideNode.CREATOR);
         definer.addProduction(ArithItemSuf, List.of(eps), ArithItemSufEmptyNode.CREATOR);
 
-        definer.addProduction(PrimExpr, List.of(lParen, ValueExprOrFuncInlineDefSuf), PrimExprToValueOrFuncDefNode.CREATOR);
+        definer.addProduction(PrimExpr, List.of(lParen, ValueExpr, rParen), PrimExprToValueExpr.CREATOR);
+        definer.addProduction(PrimExpr, List.of(FuncInlineDefine), PrimExprToFuncInlineDefNode.CREATOR);
         definer.addProduction(PrimExpr, List.of(Const), PrimExprToConstNode.CREATOR);
         definer.addProduction(PrimExpr, List.of(Id, FuncCallSuf), PrimExprToIdOrFuncCallNode.CREATOR);
-
-        definer.addProduction(ValueExprOrFuncInlineDefSuf, List.of(ValueExpr, rParen), ValueExprOrFuncInlineDefSufToValueNode.CREATOR);
-        definer.addProduction(ValueExprOrFuncInlineDefSuf, List.of(FuncInlineDefSuf), ValueExprOrFuncInlineDefSufToFuncDefNode.CREATOR);
 
         definer.addProduction(Const, List.of(constInt), ConstToIntNode.CREATOR);
         definer.addProduction(Const, List.of(constFloat), ConstToFloatNode.CREATOR);
@@ -244,7 +241,7 @@ public class PascalSyntax {
         definer.addProduction(FuncCallArgsSuf, List.of(colon, ValueExpr, FuncCallArgsSuf), FuncCallArgsSufToValueExprNode.CREATOR);
         definer.addProduction(FuncCallArgsSuf, List.of(eps), FuncCallArgsSufEmptyNode.CREATOR);
 
-        definer.addProduction(FuncInlineDefSuf, List.of(FuncArgListDef, rParen, funcArgTrans, BracedCodeBlock), FuncInlineDefSufNode.CREATOR);
+        definer.addProduction(FuncInlineDefine, List.of(Type, lParen, FuncArgListDef, rParen, funcArgTrans, BracedCodeBlock), FuncInlineDefineNode.CREATOR);
 
         // 控制语句
         definer.addProduction(Control, List.of(Break, semicolon), ControlToBreakNode.CREATOR);

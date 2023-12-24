@@ -193,14 +193,11 @@ $$
 \\
 
 & 基础数据表达式 \\
-& PrimExpr \to ( ValueExprOrFuncInlineDefSuf \\
+& PrimExpr \to (ValueExpr) \\
+& PrimExpr \to FuncInlineDefine \\
 & PrimExpr \to Const \\
 & PrimExpr \to Id \; FuncCallSuf \\
 \\
-
-& 值表达式或者变量行内定义 \\
-& ValueExprOrFuncInlineDefSuf \to ValueExpr) \\
-& ValueExprOrFuncInlineDefSuf \to FuncInlineDefSuf \\
 
 & 常量 \\
 & Const \to constInt \\
@@ -221,7 +218,7 @@ $$
 \\
 
 & 行内函数定义 \\
-& FuncInlineDefSuf \to FuncArgListDef) => BracedCodeBlock \\
+& FuncInlineDefine \to Type (FuncArgListDef) => BracedCodeBlock \\
 \\
 \end{aligned}
 $$

@@ -29,16 +29,17 @@ public class SyntaxTest {
                 {
                   int k;
                   int k;
-                  void function(string) function(bool) Max := (bool b) => {
+                  void function(string) function(bool) Max := void function(string) (bool b) => {
                       if (b) {
                           return 1;
                       } else {
                           return 0;
                       }
                   };
-                  int function(int) func F(int n) {
+                  int function(float) function(int, bool, string) func F(int function(bool) n) {
                       int n;
                       if (n <= 0) {
+                          string name;
                           F := 1;
                           continue;
                       } elseif (n == 1) {

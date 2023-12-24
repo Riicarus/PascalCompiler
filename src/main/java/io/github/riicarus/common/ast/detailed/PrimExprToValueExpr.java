@@ -5,27 +5,30 @@ import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
 import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
 
 /**
- * PrimExpr -> ( ValueExprOrFuncInlineDefSuf
+ * PrimExpr -> (ValueExpr)
  *
  * @author Riicarus
  * @create 2023-12-21 11:36
  * @since 1.0.0
  */
-public class PrimExprToValueOrFuncDefNode extends PrimExprNode {
+public class PrimExprToValueExpr extends PrimExprNode {
 
-    public static final DetailedASTCreator<PrimExprToValueOrFuncDefNode> CREATOR =
-            children -> new PrimExprToValueOrFuncDefNode(
+    public static final DetailedASTCreator<PrimExprToValueExpr> CREATOR =
+            children -> new PrimExprToValueExpr(
                     (TerminalASTNode) children.get(0),
-                    (ValueExprOrFuncInlineDefSufNode) children.get(1)
+                    (ValueExprNode) children.get(1),
+                    (TerminalASTNode) children.get(2)
             );
 
     private final TerminalASTNode lParen;
-    private final ValueExprOrFuncInlineDefSufNode valueExprOrFuncInlineDefSuf;
+    private final ValueExprNode valueExpr;
+    private final TerminalASTNode rParen;
 
-    public PrimExprToValueOrFuncDefNode(TerminalASTNode lParen,
-                                        ValueExprOrFuncInlineDefSufNode valueExprOrFuncInlineDefSuf) {
+    public PrimExprToValueExpr(TerminalASTNode lParen,
+                               ValueExprNode valueExpr, TerminalASTNode rParen) {
         this.lParen = lParen;
-        this.valueExprOrFuncInlineDefSuf = valueExprOrFuncInlineDefSuf;
+        this.valueExpr = valueExpr;
+        this.rParen = rParen;
     }
 
     @Override
@@ -40,13 +43,14 @@ public class PrimExprToValueOrFuncDefNode extends PrimExprNode {
 
         sb.append(prefix).append(t).append(link).append(symbol)
                 .append(lParen.toTreeString(level + 1, prefix))
-                .append(valueExprOrFuncInlineDefSuf.toTreeString(level + 1, prefix));
+                .append(valueExpr.toTreeString(level + 1, prefix))
+                .append(rParen.toTreeString(level + 1, prefix));
 
         return sb.toString();
     }
 
     @Override
     public ExprNode toGeneric() {
-        return valueExprOrFuncInlineDefSuf.toGeneric();
+        return valueExpr.toGeneric();
     }
 }

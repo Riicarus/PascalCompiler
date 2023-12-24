@@ -3,32 +3,39 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
-import io.github.riicarus.common.data.ast.generic.type.ProtoTypeNode;
+import io.github.riicarus.common.data.ast.generic.ProtoTypeNode;
+import io.github.riicarus.common.data.ast.generic.expr.func.FunctionNode;
 
 /**
- * FuncInlineDefSuf -> FuncArgListDef ) => BracedCodeBlock
+ * FuncInlineDefine -> Type (FuncArgListDef) => BracedCodeBlock
  *
  * @author Riicarus
  * @create 2023-12-21 11:46
  * @since 1.0.0
  */
-public class FuncInlineDefSufNode extends NonterminalASTNode {
+public class FuncInlineDefineNode extends NonterminalASTNode {
 
-    public static final DetailedASTCreator<FuncInlineDefSufNode> CREATOR =
-            children -> new FuncInlineDefSufNode(
-                    (FuncArgListDefNode) children.get(0),
+    public static final DetailedASTCreator<FuncInlineDefineNode> CREATOR =
+            children -> new FuncInlineDefineNode(
+                    (DetailedTypeNode) children.get(0),
                     (TerminalASTNode) children.get(1),
-                    (TerminalASTNode) children.get(2),
-                    (BracedCodeBlockNode) children.get(3)
+                    (FuncArgListDefNode) children.get(2),
+                    (TerminalASTNode) children.get(3),
+                    (TerminalASTNode) children.get(4),
+                    (BracedCodeBlockNode) children.get(5)
             );
 
+    private final DetailedTypeNode type;
+    private final TerminalASTNode lParen;
     private final FuncArgListDefNode funcArgListDef;
     private final TerminalASTNode rParen;
     private final TerminalASTNode funcAssign;
     private final BracedCodeBlockNode bracedCodeBlock;
 
-    public FuncInlineDefSufNode(FuncArgListDefNode funcArgListDef, TerminalASTNode rParen,
+    public FuncInlineDefineNode(DetailedTypeNode type, TerminalASTNode lParen, FuncArgListDefNode funcArgListDef, TerminalASTNode rParen,
                                 TerminalASTNode funcAssign, BracedCodeBlockNode bracedCodeBlock) {
+        this.type = type;
+        this.lParen = lParen;
         this.funcArgListDef = funcArgListDef;
         this.rParen = rParen;
         this.funcAssign = funcAssign;
@@ -46,6 +53,8 @@ public class FuncInlineDefSufNode extends NonterminalASTNode {
         }
 
         sb.append(prefix).append(t).append(link).append(symbol)
+                .append(type.toTreeString(level + 1, prefix))
+                .append(lParen.toTreeString(level + 1, prefix))
                 .append(funcArgListDef.toTreeString(level + 1, prefix))
                 .append(rParen.toTreeString(level + 1, prefix))
                 .append(funcAssign.toTreeString(level + 1, prefix))
@@ -55,10 +64,14 @@ public class FuncInlineDefSufNode extends NonterminalASTNode {
     }
 
     @Override
-    public ProtoTypeNode toGeneric() {
+    public FunctionNode toGeneric() {
         ProtoTypeNode protoNode = funcArgListDef.toGeneric();
         protoNode.setBody(bracedCodeBlock.toGeneric());
 
-        return protoNode;
+        FunctionNode functionNode = new FunctionNode();
+        functionNode.setProtoTypeNode(protoNode);
+        functionNode.setReturnType(type.toGeneric());
+
+        return functionNode;
     }
 }

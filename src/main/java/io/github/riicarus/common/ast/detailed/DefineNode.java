@@ -65,7 +65,7 @@ public class DefineNode extends NonterminalASTNode {
                 return exprNode;
             }
 
-            throw new IllegalStateException("LL1Syntax error: can not cast node into correct type, node: " + exprNode);
+            throw new IllegalStateException("LL1Syntax error: can not cast node into correct typeNode, node: " + exprNode);
         }
 
         if (varDef instanceof VarDefToFuncVarNode) {
@@ -74,6 +74,6 @@ public class DefineNode extends NonterminalASTNode {
             return funcNode;
         }
 
-        throw new IllegalStateException("LL1Syntax error: can not cast node into correct type.");
+        throw new IllegalStateException("LL1Syntax error: can not cast node into correct typeNode.");
     }
 }
