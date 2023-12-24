@@ -218,7 +218,7 @@ $$
 \\
 
 & 行内函数定义 \\
-& FuncInlineDefine \to Type (FuncArgListDef) => BracedCodeBlock \\
+& FuncInlineDefine \to Type \; (FuncArgListDef) => BracedCodeBlock \\
 \\
 \end{aligned}
 $$
