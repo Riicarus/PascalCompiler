@@ -4,7 +4,7 @@ import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.detailed.TerminalASTNode;
 import io.github.riicarus.common.data.ast.generic.ProtoTypeNode;
-import io.github.riicarus.common.data.ast.generic.expr.func.FunctionNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.FunctionNode;
 
 /**
  * FuncInlineDefine -> Type (FuncArgListDef) => BracedCodeBlock
@@ -66,7 +66,7 @@ public class FuncInlineDefineNode extends NonterminalASTNode {
     @Override
     public FunctionNode toGeneric() {
         ProtoTypeNode protoNode = funcArgListDef.toGeneric();
-        protoNode.setBody(bracedCodeBlock.toGeneric());
+        protoNode.setCodeBlockNode(bracedCodeBlock.toGeneric());
 
         FunctionNode functionNode = new FunctionNode();
         functionNode.setProtoTypeNode(protoNode);

@@ -1,7 +1,7 @@
 package io.github.riicarus.common.ast.detailed;
 
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
-import io.github.riicarus.common.data.ast.generic.GenericASTNode;
+import io.github.riicarus.common.data.ast.generic.code.CodeBlockNode;
 
 /**
  * Program -> BracedCodeBlock
@@ -40,7 +40,7 @@ public class ProgramToCodeNode extends ProgramNode {
     }
 
     @Override
-    public GenericASTNode toGeneric() {
+    public CodeBlockNode toGeneric() {
         return codeBlock.toGeneric();
     }
 }

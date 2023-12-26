@@ -3,7 +3,7 @@ package io.github.riicarus.common.ast.detailed;
 import io.github.riicarus.common.data.ast.DetailedASTCreator;
 import io.github.riicarus.common.data.ast.detailed.NonterminalASTNode;
 import io.github.riicarus.common.data.ast.generic.expr.ExprNode;
-import io.github.riicarus.common.data.ast.generic.expr.func.FunctionNode;
+import io.github.riicarus.common.data.ast.generic.expr.v.FunctionNode;
 import io.github.riicarus.common.data.ast.generic.expr.op.compute.AssignNode;
 import io.github.riicarus.common.data.ast.generic.expr.v.VariableNode;
 import io.github.riicarus.common.data.ast.generic.type.TypeNode;
