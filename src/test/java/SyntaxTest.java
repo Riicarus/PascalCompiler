@@ -34,6 +34,7 @@ public class SyntaxTest {
                     
                     int k;
                     int k;
+                    string k;
                     void function(string) function(bool) Max := void function(string) (bool b) => {
                         if (b) {
                             return 1;

@@ -42,6 +42,6 @@ public class BaseTypeToFloatNode extends BaseTypeNode {
 
     @Override
     public FloatTypeNode toGeneric() {
-        return FloatTypeNode.getInstance();
+        return new FloatTypeNode();
     }
 }

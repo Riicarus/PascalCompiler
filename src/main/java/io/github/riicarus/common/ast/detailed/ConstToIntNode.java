@@ -43,6 +43,6 @@ public class ConstToIntNode extends ConstNode {
 
     @Override
     public ValueNode toGeneric() {
-        return new ValueNode(constInt.getToken().getLexeme(), IntTypeNode.getInstance());
+        return new ValueNode(constInt.getToken().getLexeme(), new IntTypeNode());
     }
 }

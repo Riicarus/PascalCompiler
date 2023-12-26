@@ -42,6 +42,6 @@ public class BaseTypeToStringNode extends BaseTypeNode {
 
     @Override
     public StringTypeNode toGeneric() {
-        return StringTypeNode.getInstance();
+        return new StringTypeNode();
     }
 }

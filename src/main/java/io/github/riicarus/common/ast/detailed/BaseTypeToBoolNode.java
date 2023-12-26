@@ -42,6 +42,6 @@ public class BaseTypeToBoolNode extends BaseTypeNode {
 
     @Override
     public BooleanTypeNode toGeneric() {
-        return BooleanTypeNode.getInstance();
+        return new BooleanTypeNode();
     }
 }

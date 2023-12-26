@@ -43,6 +43,6 @@ public class ConstToStringNode extends ConstNode {
 
     @Override
     public ValueNode toGeneric() {
-        return new ValueNode(constString.getToken().getLexeme(), StringTypeNode.getInstance());
+        return new ValueNode(constString.getToken().getLexeme(), new StringTypeNode());
     }
 }

@@ -62,7 +62,7 @@ public class VoidFuncTypeNode extends NonterminalASTNode {
     @Override
     public FuncTypeNode toGeneric() {
         FuncTypeNode funcTypeNode = funcArgTypeDef.toGeneric();
-        funcTypeNode.deepSetReturnType(VoidTypeNode.getInstance());
+        funcTypeNode.deepSetReturnType(new VoidTypeNode());
 
         return funcTypeNode;
     }

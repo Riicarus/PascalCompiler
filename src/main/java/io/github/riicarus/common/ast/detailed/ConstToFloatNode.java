@@ -43,6 +43,6 @@ public class ConstToFloatNode extends ConstNode {
 
     @Override
     public ValueNode toGeneric() {
-        return new ValueNode(constFloat.getToken().getLexeme(), FloatTypeNode.getInstance());
+        return new ValueNode(constFloat.getToken().getLexeme(), new FloatTypeNode());
     }
 }

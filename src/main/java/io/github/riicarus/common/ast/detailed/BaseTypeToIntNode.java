@@ -42,6 +42,6 @@ public class BaseTypeToIntNode extends BaseTypeNode {
 
     @Override
     public IntTypeNode toGeneric() {
-        return IntTypeNode.getInstance();
+        return new IntTypeNode();
     }
 }

@@ -43,6 +43,6 @@ public class ConstToTrueNode extends ConstNode {
 
     @Override
     public ValueNode toGeneric() {
-        return new ValueNode("true", BooleanTypeNode.getInstance());
+        return new ValueNode("true", new BooleanTypeNode());
     }
 }
